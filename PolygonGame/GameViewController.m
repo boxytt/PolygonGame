@@ -9,11 +9,22 @@
 #import "GameViewController.h"
 #import "DrawPolygon.h"
 
+#define pi 3.14159265358979323846
+#define radiansToDegrees(x) (180.0 * x / pi)
+
+/* tag的值：
+    顶点：101～ 
+    线：201～
+    操作符：301～
+    序号：401～
+*/
+
 @interface GameViewController () {
     int vertexNum;
     NSMutableArray *vertexValues; // 顶点数值
     NSMutableArray *operatorValues; // 操作符
     NSMutableArray *vertexPosition; // 顶点位置
+    NSMutableArray *allValues; // 顶点数值和操作符
 }
 
 
@@ -30,11 +41,16 @@
     vertexValues = [[NSMutableArray alloc]init];
     operatorValues = [[NSMutableArray alloc]init];
     vertexPosition = [[NSMutableArray alloc]init];
+    allValues = [[NSMutableArray alloc]initWithObjects:@"a",@"b",@"c",@"d",@"e",@"f", nil];
     
     [self createVerAndOpeRandomly];
     [self drawPolygon];
-    
     [self calculateHighestScore];
+    
+    NSLog(@"before: %@", allValues[1]);
+    [allValues removeObjectAtIndex:1];
+    NSLog(@"after: %@", allValues[1]);
+
  
 }
 
@@ -49,9 +65,9 @@
     NSLog(@"%@", vertexValues);
     
     // 随机“+”，“-”，“*”，“／”
-    NSArray *operators = [[NSArray alloc]initWithObjects:@"+", @"-", @"*", @"/", nil];
+    NSArray *operators = [[NSArray alloc]initWithObjects:@"+", @"*", nil];
     for (int i = 0; i < vertexNum; i++) {
-        [operatorValues addObject:[operators objectAtIndex:[self getRandomNumber:0 to:3]]];
+        [operatorValues addObject:[operators objectAtIndex:[self getRandomNumber:0 to:1]]];
     }
     NSLog(@"%@", operatorValues);
     
@@ -88,6 +104,7 @@
         
         // 创建带有数字的顶点
         UIButton *vertexButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 2 * radiusOfCircle, 2 * radiusOfCircle)];
+        vertexButton.tag = 101 + i;
         vertexButton.center = point;
         [vertexButton setTitle:[NSString stringWithFormat:@"%d", [vertexValues[i] intValue]] forState:UIControlStateNormal];
         [vertexButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -105,7 +122,12 @@
         // 画连线
         float rads = [self angleForStartPoint:CGPointFromString(vertexPosition[i]) EndPoint:CGPointFromString(vertexPosition[j])];
         float distance = [self distanceBetweenPiontA:CGPointFromString(vertexPosition[i]) andPointB:CGPointFromString(vertexPosition[j])] - 2 * radiusOfCircle;
-        UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, distance, 3)];
+        UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, distance, 5)];
+        button.tag = 201 + i;
+        [button addTarget:self action:@selector(edgeTouchDown:) forControlEvents:UIControlEventTouchDown];
+        [button addTarget:self action:@selector(edgeTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(edgeTouchUpOutside:) forControlEvents:UIControlEventTouchUpOutside];
+
         button.backgroundColor = [UIColor blackColor];
         // 旋转
         button.transform = CGAffineTransformMakeRotation(rads);
@@ -125,30 +147,28 @@
         if (r < 0) {
             y0 = -y0;
         }
-
-        float xOfNumLabel = (d + 15) / d * x0 + canvasCenter.x;
-        float yOfNumLabel = (d + 15) / d * y0 + canvasCenter.y;
         
         float xOfOperatorLabel = (d - 15) / d * x0 + canvasCenter.x;
         float yOfOperatorLabel = (d - 15) / d * y0 + canvasCenter.y;
 
-
+        float xOfNumLabel = (d + 15) / d * x0 + canvasCenter.x;
+        float yOfNumLabel = (d + 15) / d * y0 + canvasCenter.y;
+        
+       
+        UILabel *operatorLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 10, 20)];
+        operatorLabel.tag = 301 + i;
+        operatorLabel.center = CGPointMake(xOfOperatorLabel, yOfOperatorLabel);
+        operatorLabel.text = [NSString stringWithFormat:@"%@", operatorValues[i]];
+        [self.contentView addSubview:operatorLabel];
+        
         UILabel *numLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+        numLabel.tag = 401 + i;
         numLabel.center = CGPointMake(xOfNumLabel, yOfNumLabel);
         numLabel.text = [NSString stringWithFormat:@"%d", i+1];
         [self.contentView addSubview:numLabel];
 
-        UILabel *operatorLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 10, 20)];
-        operatorLabel.center = CGPointMake(xOfOperatorLabel, yOfOperatorLabel);
-        operatorLabel.text = [NSString stringWithFormat:@"%@", operatorValues[i]];
-        [self.contentView addSubview:operatorLabel];
-
     }
-    
 }
-
-#define pi 3.14159265358979323846
-#define radiansToDegrees(x) (180.0 * x / pi)
 
 // 两点之间的弧度
 -(CGFloat)angleForStartPoint:(CGPoint)startPoint EndPoint:(CGPoint)endPoint{
@@ -175,23 +195,48 @@
     return sqrt(deltaX*deltaX + deltaY*deltaY);
 };
 
+#pragma mark - 删除线
 
-- (void)edgeTouchDown {
-    UIButton *button = (UIButton *)[self.view viewWithTag:001];
-    button.backgroundColor = [UIColor orangeColor];
-    
+// 按下横线
+- (void)edgeTouchDown:(UIButton *)button {
+    long tag = button.tag;
+    UILabel *numLabel = (UILabel *)[self.contentView viewWithTag:tag+100];
+    UILabel *operatorLabel = (UILabel *)[self.contentView viewWithTag:tag+200];
+
+    button.backgroundColor = [UIColor redColor];
+    numLabel.textColor = [UIColor redColor];
+    operatorLabel.textColor = [UIColor redColor];
+    NSLog(@"touch No.%ld button\n", (long)button.tag);
 }
-- (void)edgeTouchUpInside {
+
+// 按下后在外面抬起，取消删除
+- (void)edgeTouchUpOutside:(UIButton *)button {
+    long tag = button.tag;
+    UILabel *numLabel = (UILabel *)[self.contentView viewWithTag:tag+100];
+    UILabel *operatorLabel = (UILabel *)[self.contentView viewWithTag:tag+200];
+    
+    button.backgroundColor = [UIColor blackColor];
+    numLabel.textColor = [UIColor blackColor];
+    operatorLabel.textColor = [UIColor blackColor];
+
+}
+
+// 按下后在里面抬起，删除
+- (void)edgeTouchUpInside:(UIButton *)button {
     
     // 去掉线
-    UIButton *button = (UIButton *)[self.view viewWithTag:001];
-    button.backgroundColor = [UIColor redColor];
-
+    long tag = button.tag;
+    UILabel *numLabel = (UILabel *)[self.contentView viewWithTag:tag+100];
+    UILabel *operatorLabel = (UILabel *)[self.contentView viewWithTag:tag+200];
+    
     [UIView animateWithDuration:0.3 animations:^{
         
     } completion:^(BOOL finished) {
+        NSLog(@"remove No.%ld button\n", (long)button.tag);
         [button removeFromSuperview];
-
+        [numLabel removeFromSuperview];
+        [operatorLabel removeFromSuperview];
+        
     }];
     
 }
@@ -207,7 +252,6 @@
     
     
 }
-
 
 
 

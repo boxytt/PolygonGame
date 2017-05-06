@@ -11,7 +11,9 @@
 @interface HomeViewController : UIViewController
 
 
+@property (weak, nonatomic) IBOutlet UITextField *vertexNumTextField;
+@property (weak, nonatomic) IBOutlet UIButton *createButton;
+@property (weak, nonatomic) IBOutlet UIButton *specifyButton;
 
-
-
+- (IBAction)SpecifyBtnClicked:(UIButton *)sender;
 @end
