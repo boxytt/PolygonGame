@@ -42,25 +42,27 @@
     self.createButton.enabled = NO;
     self.specifyButton.enabled = NO;
     
-    UITextField *valueTextField = [[UITextField alloc]initWithFrame:CGRectMake(60, self.specifyButton.frame.origin.y + 33 + 10, self.view.bounds.size.width - 120, 30)];
+    UITextField *valueTextField = [[UITextField alloc]initWithFrame:CGRectMake(self.view.bounds.size.width, self.specifyButton.frame.origin.y + 33 + 10, self.view.bounds.size.width - 120, 30)];
     valueTextField.font = [UIFont systemFontOfSize:14];
     valueTextField.borderStyle = UITextBorderStyleRoundedRect;
     valueTextField.placeholder = [NSString stringWithFormat:@"输入%@个顶点的值，用空格隔开", self.vertexNumTextField.text];
     valueTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    valueTextField.inputAccessoryView = [[UIView alloc] init];
     valueTextField.tag = 001;
     [self.view addSubview:valueTextField];
     [valueTextField becomeFirstResponder];
     
-    UITextField *operatorTextField = [[UITextField alloc]initWithFrame:CGRectMake(60, self.specifyButton.frame.origin.y + 33 + 10 + 30 + 10, self.view.bounds.size.width - 120, 30)];
+    UITextField *operatorTextField = [[UITextField alloc]initWithFrame:CGRectMake(self.view.bounds.size.width, self.specifyButton.frame.origin.y + 33 + 10 + 30 + 10, self.view.bounds.size.width - 120, 30)];
     operatorTextField.font = [UIFont systemFontOfSize:14];
     operatorTextField.borderStyle = UITextBorderStyleRoundedRect;
     operatorTextField.placeholder = [NSString stringWithFormat:@"输入%@条横线上的操作符，用空格隔开", self.vertexNumTextField.text];
     operatorTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    operatorTextField.inputAccessoryView = [[UIView alloc] init];
     operatorTextField.tag = 002;
     [self.view addSubview:operatorTextField];
     
     // 设置button
-    UIButton *confirmButton = [[UIButton alloc]initWithFrame:CGRectMake(operatorTextField.frame.origin.x + 25, operatorTextField.frame.origin.y + 30 + 10, operatorTextField.frame.size.width / 2 - 40, 30)];
+    UIButton *confirmButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.bounds.size.width, operatorTextField.frame.origin.y + 30 + 10, operatorTextField.frame.size.width / 2 - 40, 30)];
     [confirmButton setTitle:@"确认" forState:UIControlStateNormal];
     confirmButton.titleLabel.font = [UIFont systemFontOfSize:14];
     [confirmButton setTitleColor:[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1] forState:UIControlStateNormal];
@@ -73,7 +75,7 @@
     [confirmButton addTarget:self action:@selector(confirmBtnClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:confirmButton];
     
-    UIButton *cannelButton = [[UIButton alloc]initWithFrame:CGRectMake(confirmButton.frame.origin.x + confirmButton.frame.size.width + 30, confirmButton.frame.origin.y, operatorTextField.frame.size.width / 2 - 40, 30)];
+    UIButton *cannelButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.bounds.size.width, confirmButton.frame.origin.y, operatorTextField.frame.size.width / 2 - 40, 30)];
     [cannelButton setTitle:@"取消" forState:UIControlStateNormal];
     cannelButton.titleLabel.font = [UIFont systemFontOfSize:14];
     [cannelButton setTitleColor:[UIColor colorWithRed:0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1] forState:UIControlStateNormal];
@@ -88,6 +90,25 @@
     [valueTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [operatorTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 
+    
+    [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        valueTextField.frame = CGRectMake(60, self.specifyButton.frame.origin.y + 33 + 10, self.view.bounds.size.width - 120, 30);
+    } completion:^(BOOL finished) {
+        [valueTextField becomeFirstResponder];
+    }];
+    [UIView animateWithDuration:0.5 delay:0.3 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        operatorTextField.frame = CGRectMake(60, self.specifyButton.frame.origin.y + 33 + 10 + 30 + 10, self.view.bounds.size.width - 120, 30);
+    } completion:^(BOOL finished) {
+    }];
+    [UIView animateWithDuration:0.5 delay:0.6 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        confirmButton.frame = CGRectMake(operatorTextField.frame.origin.x + 25, operatorTextField.frame.origin.y + 30 + 10, operatorTextField.frame.size.width / 2 - 40, 30);
+    } completion:^(BOOL finished) {
+    }];
+    [UIView animateWithDuration:0.5 delay:0.7 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        cannelButton.frame = CGRectMake(confirmButton.frame.origin.x + confirmButton.frame.size.width + 30, confirmButton.frame.origin.y, operatorTextField.frame.size.width / 2 - 40, 30);
+    } completion:^(BOOL finished) {
+    }];
+    
 }
 
 
@@ -117,10 +138,29 @@
     UITextField *operatorTextField = (UITextField *)[self.view viewWithTag:002];
     UIButton *confirmButton = (UIButton *)[self.view viewWithTag:003];
     UIButton *cannelButton = (UIButton *)[self.view viewWithTag:004];
-    [valueTextField removeFromSuperview];
-    [operatorTextField removeFromSuperview];
-    [confirmButton removeFromSuperview];
-    [cannelButton removeFromSuperview];
+    [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        valueTextField.frame = CGRectMake(-self.view.bounds.size.width - 120, self.specifyButton.frame.origin.y + 33 + 10, self.view.bounds.size.width - 120, 30);
+    } completion:^(BOOL finished) {
+        [valueTextField removeFromSuperview];
+    }];
+    [UIView animateWithDuration:0.5 delay:0.1 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        operatorTextField.frame = CGRectMake(-self.view.bounds.size.width - 120, self.specifyButton.frame.origin.y + 33 + 10 + 30 + 10, self.view.bounds.size.width - 120, 30);
+    } completion:^(BOOL finished) {
+        [operatorTextField removeFromSuperview];
+
+    }];
+    [UIView animateWithDuration:0.5 delay:0.2 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        confirmButton.frame = CGRectMake(-operatorTextField.frame.size.width / 2 - 40, operatorTextField.frame.origin.y + 30 + 10, operatorTextField.frame.size.width / 2 - 40, 30);
+    } completion:^(BOOL finished) {
+        [confirmButton removeFromSuperview];
+
+    }];
+    [UIView animateWithDuration:0.5 delay:0.3 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        cannelButton.frame = CGRectMake(-operatorTextField.frame.size.width / 2 - 40, confirmButton.frame.origin.y, operatorTextField.frame.size.width / 2 - 40, 30);
+    } completion:^(BOOL finished) {
+        [cannelButton removeFromSuperview];
+    }];
+
     
     self.createButton.enabled = YES;
     self.specifyButton.enabled = YES;
@@ -212,24 +252,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.vertexNumTextField resignFirstResponder];
+}
 
 
 

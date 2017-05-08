@@ -17,5 +17,6 @@
 @property (nonatomic, strong) NSString *vertexStr;
 @property (nonatomic, strong) NSString *operatorStr;
 - (IBAction)backBtnClicked:(UIButton *)sender;
+- (IBAction)againBtnClicked:(UIButton *)sender;
 
 @end

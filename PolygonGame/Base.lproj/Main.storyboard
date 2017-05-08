@@ -22,61 +22,62 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="顶点数n" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z9X-0n-ujT">
-                                <rect key="frame" x="100" y="301" width="72.5" height="24"/>
+                                <rect key="frame" x="100" y="338" width="72.5" height="24"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="多边形游戏" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ob8-vR-Dyj">
-                                <rect key="frame" x="87.5" y="223" width="201.5" height="48"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="40"/>
-                                <color key="textColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z8F-fy-mHe">
-                                <rect key="frame" x="192" y="297" width="81.5" height="30"/>
+                                <rect key="frame" x="192" y="334" width="81.5" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aha-Oo-Uk3">
-                                <rect key="frame" x="100" y="347" width="174" height="33"/>
+                                <rect key="frame" x="100" y="384" width="174" height="33"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="随机产生数值和运算符"/>
                                 <connections>
                                     <segue destination="kfo-eG-sAO" kind="show" identifier="toGameVC" id="cu6-fo-XFo"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="卐" translatesAutoresizingMaskIntoConstraints="NO" id="6oY-1j-cIh">
-                                <rect key="frame" x="88" y="55" width="200" height="168"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon" translatesAutoresizingMaskIntoConstraints="NO" id="6oY-1j-cIh">
+                                <rect key="frame" x="102.5" y="80" width="170" height="170"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="fMG-T1-oLa"/>
-                                    <constraint firstAttribute="height" constant="168" id="pas-v8-QKj"/>
+                                    <constraint firstAttribute="height" constant="170" id="c1g-DA-7VQ"/>
+                                    <constraint firstAttribute="width" constant="170" id="fgP-WL-S6T"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z9j-EH-i3o">
-                                <rect key="frame" x="100" y="390" width="174" height="33"/>
+                                <rect key="frame" x="100" y="427" width="174" height="33"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="具体指定数值和运算符"/>
                                 <connections>
                                     <action selector="SpecifyBtnClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="86B-GO-CvF"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="多边形游戏" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ob8-vR-Dyj">
+                                <rect key="frame" x="87" y="260" width="201.5" height="48"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="40"/>
+                                <color key="textColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="z8F-fy-mHe" firstAttribute="leading" secondItem="Z9X-0n-ujT" secondAttribute="trailing" constant="20" id="3h5-Fw-pI6"/>
-                            <constraint firstItem="6oY-1j-cIh" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="7Dw-7G-TbJ"/>
                             <constraint firstItem="Z9j-EH-i3o" firstAttribute="leading" secondItem="Aha-Oo-Uk3" secondAttribute="leading" id="8AY-rn-rMJ"/>
                             <constraint firstItem="Aha-Oo-Uk3" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="100" id="EJD-Aq-ZcL"/>
+                            <constraint firstItem="6oY-1j-cIh" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="FV1-2r-weK"/>
                             <constraint firstItem="Z9j-EH-i3o" firstAttribute="top" secondItem="Aha-Oo-Uk3" secondAttribute="bottom" constant="10" id="G9H-1B-QYg"/>
                             <constraint firstItem="Z9X-0n-ujT" firstAttribute="top" secondItem="ob8-vR-Dyj" secondAttribute="bottom" constant="30" id="JPY-rO-pyM"/>
                             <constraint firstItem="Aha-Oo-Uk3" firstAttribute="leading" secondItem="Z9X-0n-ujT" secondAttribute="leading" id="Li8-He-Ng2"/>
                             <constraint firstAttribute="trailing" secondItem="Aha-Oo-Uk3" secondAttribute="trailing" constant="101" id="Ns3-He-8wx"/>
-                            <constraint firstItem="6oY-1j-cIh" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="35" id="Ooj-HR-0LC"/>
                             <constraint firstItem="Aha-Oo-Uk3" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Pom-MV-tN3"/>
                             <constraint firstItem="Aha-Oo-Uk3" firstAttribute="trailing" secondItem="z8F-fy-mHe" secondAttribute="trailing" id="QcA-Bf-gWT"/>
-                            <constraint firstItem="ob8-vR-Dyj" firstAttribute="top" secondItem="6oY-1j-cIh" secondAttribute="bottom" id="fFv-NU-I2p"/>
+                            <constraint firstItem="6oY-1j-cIh" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="60" id="Unl-fc-Bo3"/>
+                            <constraint firstItem="ob8-vR-Dyj" firstAttribute="top" secondItem="6oY-1j-cIh" secondAttribute="bottom" constant="10" id="YLv-QD-gte"/>
                             <constraint firstItem="ob8-vR-Dyj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="isq-Lf-89V"/>
                             <constraint firstItem="Aha-Oo-Uk3" firstAttribute="top" secondItem="z8F-fy-mHe" secondAttribute="bottom" constant="20" id="pSU-S3-zFJ"/>
                             <constraint firstItem="z8F-fy-mHe" firstAttribute="top" secondItem="ob8-vR-Dyj" secondAttribute="bottom" constant="26" id="y7w-5f-vAT"/>
@@ -125,6 +126,9 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Qj-DL-1Lz">
                                 <rect key="frame" x="131" y="587" width="31" height="30"/>
                                 <state key="normal" title="重来"/>
+                                <connections>
+                                    <action selector="againBtnClicked:" destination="kfo-eG-sAO" eventType="touchUpInside" id="yTx-w1-y6V"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fBw-dW-QFH">
                                 <rect key="frame" x="0.0" y="158" width="375" height="384"/>
@@ -182,6 +186,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="卐" width="270" height="210"/>
+        <image name="icon" width="500" height="500"/>
     </resources>
 </document>

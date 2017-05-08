@@ -127,15 +127,20 @@
         [vertexPosition addObject:NSStringFromCGPoint(point)];
         
         // 创建带有数字的顶点
-        UIButton *vertexButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 2 * radiusOfCircle, 2 * radiusOfCircle)];
+        UIButton *vertexButton = [[UIButton alloc]initWithFrame:CGRectMake(self.contentView.frame.size.width/2, self.contentView.frame.size.height/2, 2 * radiusOfCircle, 2 * radiusOfCircle)];
         vertexButton.tag = 101 + i;
-        vertexButton.center = point;
         [vertexButton setTitle:[NSString stringWithFormat:@"%d", [vertexValues[i] intValue]] forState:UIControlStateNormal];
         [vertexButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         vertexButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         [vertexButton setBackgroundImage:[UIImage imageNamed:@"圈"] forState:UIControlStateNormal];
         vertexButton.userInteractionEnabled = NO;
         [self.contentView addSubview:vertexButton];
+        
+        [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            vertexButton.center = point;
+        } completion:^(BOOL finished) {
+            
+        }];
         
     }
     
@@ -152,7 +157,7 @@
         [button addTarget:self action:@selector(edgeTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [button addTarget:self action:@selector(edgeTouchUpOutside:) forControlEvents:UIControlEventTouchUpOutside];
 
-        button.backgroundColor = [UIColor blackColor];
+        button.backgroundColor = [UIColor clearColor];
         // 旋转
         button.transform = CGAffineTransformMakeRotation(rads);
         // 移动
@@ -178,19 +183,30 @@
         float xOfNumLabel = (d + 15) / d * x0 + canvasCenter.x;
         float yOfNumLabel = (d + 15) / d * y0 + canvasCenter.y;
         
-       
         UILabel *operatorLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 10, 20)];
         operatorLabel.tag = 301 + i;
         operatorLabel.center = CGPointMake(xOfOperatorLabel, yOfOperatorLabel);
         operatorLabel.text = [NSString stringWithFormat:@"%@", operatorValues[i]];
+        operatorLabel.textColor = [UIColor clearColor];
         [self.contentView addSubview:operatorLabel];
         
         UILabel *numLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
         numLabel.tag = 401 + i;
         numLabel.center = CGPointMake(xOfNumLabel, yOfNumLabel);
         numLabel.text = [NSString stringWithFormat:@"%d", i+1];
+        numLabel.textColor = [UIColor clearColor];
         [self.contentView addSubview:numLabel];
 
+        [UIView animateWithDuration:0.3 delay:0.3 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            button.backgroundColor = [UIColor blackColor];
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.3 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                operatorLabel.textColor = [UIColor blackColor];
+                numLabel.textColor = [UIColor blackColor];
+            } completion:^(BOOL finished) {
+            }];
+        }];
+        
     }
 }
 
@@ -392,7 +408,6 @@
                     vertexButton.center = CGPointMake(self.contentView.frame.size.width/2, self.contentView.frame.size.height/2);
                     vertexButton.transform = CGAffineTransformMakeScale(1.3, 1.3);
                 } completion:^(BOOL finished) {
-                    
                 }];
             }];
             
@@ -546,6 +561,24 @@
         
         vertexNum = 0;
     }];
+}
+
+- (IBAction)againBtnClicked:(id)sender {
+    for (UIView *view in [self.contentView subviews]) {
+        [view removeFromSuperview];
+    }
+    
+    // 重新创建allValues数组
+    [allValues removeAllObjects];
+    for (int i = 0; i < vertexNum; i++) {
+        [allValues addObject: [vertexValues objectAtIndex:i]];
+        [allValues addObject: [operatorValues objectAtIndex:i]];
+    }
+    NSLog(@"all: %@", allValues);
+    // 绘图
+    [self drawPolygon];
+    isFirstStep = YES;
+    self.yourScoreLabel.text = @"正在进行";
 }
 
 
