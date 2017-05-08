@@ -36,20 +36,6 @@
 
 
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
-    
-    if([segue.identifier isEqualToString:@"toGameVC"]) {
-        id theSegue = segue.destinationViewController;
-        [theSegue setValue:self.vertexNumTextField.text forKey:@"vertexNumStr"];
-        self.vertexNumTextField.text = @"";
-        self.createButton.enabled = NO;
-        self.specifyButton.enabled = NO;
-    }           
-    
-}
-
-
 #pragma mark - 具体指定数值和运算符
 
 - (IBAction)SpecifyBtnClicked:(UIButton *)sender {
@@ -105,19 +91,26 @@
 }
 
 
-
+// 确认按钮
 - (void)confirmBtnClicked {
     UITextField *valueTextField = (UITextField *)[self.view viewWithTag:001];
     UITextField *operatorTextField = (UITextField *)[self.view viewWithTag:002];
 
     NSString *valueStr = valueTextField.text;
     NSString *operatorStr = operatorTextField.text;
-    NSLog(@"%@\n", valueStr);
-    NSLog(@"%@\n", operatorStr);
-
     
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+    GameViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"gameVC"];
+    
+    vc.vertexStr = valueStr;
+    vc.operatorStr = operatorStr;
+    vc.vertexNumStr = self.vertexNumTextField.text;
+    
+    [self presentViewController:vc animated:YES completion:nil];
+
 }
 
+// 取消按钮
 - (void)cannelBtnClicked {
     
     UITextField *valueTextField = (UITextField *)[self.view viewWithTag:001];
@@ -135,9 +128,7 @@
 }
 
 
-
-
-
+#pragma mark - 实时监视输入框
 
 - (void)textFieldDidChange:(UITextField *)textField {
 
@@ -193,20 +184,31 @@
     
 }
 
+// 返回字符串中空格的个数
 - (int)countBlankWithString:(NSString *)string {
-    
     int count = 0;
-    
     for (int i = 0; i < string.length; i++) {
         if ([string characterAtIndex:i] == ' ') {
             count++;
         }
     }
-    
     return count;
 }
+
+
+#pragma mark - Storyboard转场
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     
+    if([segue.identifier isEqualToString:@"toGameVC"]) {
+        id theSegue = segue.destinationViewController;
+        [theSegue setValue:self.vertexNumTextField.text forKey:@"vertexNumStr"];
+        self.vertexNumTextField.text = @"";
+        self.createButton.enabled = NO;
+        self.specifyButton.enabled = NO;
+    }
+    
+}
 
 
 

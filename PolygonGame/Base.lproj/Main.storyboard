@@ -134,8 +134,14 @@
                                 <rect key="frame" x="50" y="50" width="275" height="30"/>
                                 <state key="normal" title="最高分：x"/>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="你的得分：正在进行" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wYF-RQ-BsY">
-                                <rect key="frame" x="50" y="90" width="275" height="18"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="你的得分：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cSR-Um-qOh">
+                                <rect key="frame" x="128" y="83" width="77" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="正在进行" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wYF-RQ-BsY">
+                                <rect key="frame" x="206" y="83" width="61.5" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -144,29 +150,30 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="fBw-dW-QFH" secondAttribute="trailing" id="8Ex-7B-lUe"/>
+                            <constraint firstItem="cSR-Um-qOh" firstAttribute="leading" secondItem="dDC-hf-vYn" secondAttribute="leading" constant="128" id="8Xv-zw-fL9"/>
                             <constraint firstItem="A7t-0i-Usm" firstAttribute="leading" secondItem="dDC-hf-vYn" secondAttribute="leading" constant="50" id="C3c-mP-WoH"/>
+                            <constraint firstItem="wYF-RQ-BsY" firstAttribute="top" secondItem="mbp-9s-28H" secondAttribute="bottom" constant="3" id="CR7-5W-GYk"/>
                             <constraint firstAttribute="trailing" secondItem="uO4-OI-gHk" secondAttribute="trailing" constant="50" id="ESf-n9-D58"/>
                             <constraint firstAttribute="trailing" secondItem="mbp-9s-28H" secondAttribute="trailing" constant="50" id="GRz-QV-tQk"/>
-                            <constraint firstItem="wYF-RQ-BsY" firstAttribute="top" secondItem="mbp-9s-28H" secondAttribute="bottom" constant="10" id="OTR-I4-vNt"/>
-                            <constraint firstItem="fBw-dW-QFH" firstAttribute="top" secondItem="wYF-RQ-BsY" secondAttribute="bottom" constant="50" id="OTl-OF-ZhD"/>
                             <constraint firstItem="6Qj-DL-1Lz" firstAttribute="bottom" secondItem="A7t-0i-Usm" secondAttribute="bottom" id="RG2-sD-gG3"/>
+                            <constraint firstItem="cSR-Um-qOh" firstAttribute="top" secondItem="mbp-9s-28H" secondAttribute="bottom" constant="3" id="Rqd-Xj-CnR"/>
                             <constraint firstItem="uO4-OI-gHk" firstAttribute="bottom" secondItem="A7t-0i-Usm" secondAttribute="bottom" id="WsC-RP-m96"/>
                             <constraint firstItem="mbp-9s-28H" firstAttribute="leading" secondItem="dDC-hf-vYn" secondAttribute="leading" constant="50" id="XKy-yV-vQ7"/>
                             <constraint firstItem="6Qj-DL-1Lz" firstAttribute="top" secondItem="fBw-dW-QFH" secondAttribute="bottom" constant="45" id="YUo-Bl-8BE"/>
-                            <constraint firstAttribute="trailing" secondItem="wYF-RQ-BsY" secondAttribute="trailing" constant="50" id="axX-Hh-HBA"/>
-                            <constraint firstItem="wYF-RQ-BsY" firstAttribute="leading" secondItem="dDC-hf-vYn" secondAttribute="leading" constant="50" id="fNU-xA-8uo"/>
+                            <constraint firstItem="wYF-RQ-BsY" firstAttribute="leading" secondItem="cSR-Um-qOh" secondAttribute="trailing" constant="1" id="aaz-TA-9DK"/>
                             <constraint firstItem="mbp-9s-28H" firstAttribute="top" secondItem="uN6-jr-6wX" secondAttribute="bottom" constant="30" id="g8a-Dr-5RG"/>
                             <constraint firstItem="6Qj-DL-1Lz" firstAttribute="leading" secondItem="A7t-0i-Usm" secondAttribute="trailing" constant="50" id="h7e-N2-8zp"/>
                             <constraint firstItem="aOe-zO-zm6" firstAttribute="top" secondItem="6Qj-DL-1Lz" secondAttribute="bottom" constant="50" id="jlQ-Wb-nsG"/>
                             <constraint firstItem="k1m-kn-Htx" firstAttribute="bottom" secondItem="A7t-0i-Usm" secondAttribute="bottom" id="k8e-HT-cv3"/>
                             <constraint firstItem="fBw-dW-QFH" firstAttribute="leading" secondItem="dDC-hf-vYn" secondAttribute="leading" id="kd0-k5-cT7"/>
-                            <constraint firstItem="wYF-RQ-BsY" firstAttribute="centerX" secondItem="dDC-hf-vYn" secondAttribute="centerX" id="qgS-sw-rHs"/>
+                            <constraint firstItem="fBw-dW-QFH" firstAttribute="top" secondItem="cSR-Um-qOh" secondAttribute="bottom" constant="57" id="kkF-BU-Iue"/>
                             <constraint firstItem="uO4-OI-gHk" firstAttribute="leading" secondItem="k1m-kn-Htx" secondAttribute="trailing" constant="50" id="vX4-RB-wjd"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="contentView" destination="fBw-dW-QFH" id="wpz-qq-QlL"/>
                         <outlet property="highestScoreButton" destination="mbp-9s-28H" id="xoG-Lg-tFW"/>
+                        <outlet property="yourScoreLabel" destination="wYF-RQ-BsY" id="3NJ-X5-3yS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="epn-HE-ZRx" userLabel="First Responder" sceneMemberID="firstResponder"/>
