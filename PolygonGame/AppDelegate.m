@@ -18,10 +18,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
+    manager.enable = YES;
+    manager.shouldResignOnTouchOutside = YES;
+    manager.shouldToolbarUsesTextFieldTintColor = YES;
+    manager.enableAutoToolbar = YES;
+    manager.toolbarManageBehaviour = IQAutoToolbarByTag;
     
-    [IQKeyboardManager sharedManager].enable = YES;
-    [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
 
+    //    [IQKeyboardManager sharedManager].enable = YES;
+//    [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
 
     return YES;
 }

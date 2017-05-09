@@ -8,6 +8,8 @@
 
 #import "HomeViewController.h"
 #import "GameViewController.h"
+#import "IQKeyboardManager.h"
+#import "IQKeyboardReturnKeyHandler.h"
 
 @interface HomeViewController () {
     BOOL btnEnabled;
@@ -15,12 +17,18 @@
     BOOL operatorEnabled;
 }
 
+
+@property (nonatomic, strong) IQKeyboardReturnKeyHandler *returnKeyHandler;
+
+
 @end
 
 @implementation HomeViewController
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    IQKeyboardReturnKeyHandler *retuenKeyHandler = [[IQKeyboardReturnKeyHandler alloc]initWithViewController:self];
+    retuenKeyHandler.lastTextFieldReturnKeyType =UIReturnKeyDone;
     
     [self.vertexNumTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
@@ -41,7 +49,6 @@
 - (IBAction)SpecifyBtnClicked:(UIButton *)sender {
     self.createButton.enabled = NO;
     self.specifyButton.enabled = NO;
-    
     UITextField *valueTextField = [[UITextField alloc]initWithFrame:CGRectMake(self.view.bounds.size.width, self.specifyButton.frame.origin.y + 33 + 10, self.view.bounds.size.width - 120, 30)];
     valueTextField.font = [UIFont systemFontOfSize:14];
     valueTextField.borderStyle = UITextBorderStyleRoundedRect;
@@ -61,6 +68,7 @@
     operatorTextField.tag = 002;
     [self.view addSubview:operatorTextField];
     
+
     // 设置button
     UIButton *confirmButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.bounds.size.width, operatorTextField.frame.origin.y + 30 + 10, operatorTextField.frame.size.width / 2 - 40, 30)];
     [confirmButton setTitle:@"确认" forState:UIControlStateNormal];
@@ -238,8 +246,6 @@
 
 #pragma mark - Storyboard转场
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
-    
     if([segue.identifier isEqualToString:@"toGameVC"]) {
         id theSegue = segue.destinationViewController;
         [theSegue setValue:self.vertexNumTextField.text forKey:@"vertexNumStr"];
@@ -248,12 +254,6 @@
         self.specifyButton.enabled = NO;
     }
     
-}
-
-
-
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [self.vertexNumTextField resignFirstResponder];
 }
 
 

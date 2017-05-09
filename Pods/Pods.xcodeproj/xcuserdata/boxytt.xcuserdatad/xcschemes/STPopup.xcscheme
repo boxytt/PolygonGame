@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '135569AE478E68AE4A6AB09C5C1C076A'
-               BlueprintName = 'Pods-PolygonGame'
+               BlueprintIdentifier = 'F1E61E0664C7F767F829CE995185F2D5'
+               BlueprintName = 'STPopup'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'libPods-PolygonGame.a'>
+               BuildableName = 'libSTPopup.a'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

@@ -1,12 +1,15 @@
 PODS:
   - IQKeyboardManager (4.0.8)
+  - STPopup (1.8.2)
 
 DEPENDENCIES:
   - IQKeyboardManager
+  - STPopup
 
 SPEC CHECKSUMS:
   IQKeyboardManager: 1a8189fa153bf09044355ee0ad36826f6767e7f7
+  STPopup: b69b3e7484ef7d2baec5f9ab2939f8a7bcdfe218
 
-PODFILE CHECKSUM: b3ee299e1ac02de5aa3ead5d6fc2ce418c4ad59a
+PODFILE CHECKSUM: 2fa1e775324ebd84fe4f759dadfa8222f780b066
 
 COCOAPODS: 1.0.1

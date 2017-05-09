@@ -116,12 +116,16 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uO4-OI-gHk">
                                 <rect key="frame" x="294" y="587" width="31" height="30"/>
                                 <state key="normal" title="历史"/>
+                                <connections>
+                                    <action selector="historyBtnClicked:" destination="kfo-eG-sAO" eventType="touchUpInside" id="lfY-WB-96t"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k1m-kn-Htx">
                                 <rect key="frame" x="213" y="587" width="31" height="30"/>
-                                <state key="normal" title="撤销">
-                                    <color key="titleColor" red="0.0" green="0.47934520244598389" blue="0.99908632040023804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
+                                <state key="normal" title="撤销"/>
+                                <connections>
+                                    <action selector="revokeBtnClicked:" destination="kfo-eG-sAO" eventType="touchUpInside" id="8yV-Wq-ZOh"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Qj-DL-1Lz">
                                 <rect key="frame" x="131" y="587" width="31" height="30"/>
@@ -177,6 +181,8 @@
                     <connections>
                         <outlet property="contentView" destination="fBw-dW-QFH" id="wpz-qq-QlL"/>
                         <outlet property="highestScoreButton" destination="mbp-9s-28H" id="xoG-Lg-tFW"/>
+                        <outlet property="historyButton" destination="uO4-OI-gHk" id="Ehj-nh-jQn"/>
+                        <outlet property="revokeButton" destination="k1m-kn-Htx" id="oFl-JG-8ev"/>
                         <outlet property="yourScoreLabel" destination="wYF-RQ-BsY" id="3NJ-X5-3yS"/>
                     </connections>
                 </viewController>

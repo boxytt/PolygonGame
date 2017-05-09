@@ -7,8 +7,8 @@
 //
 
 #import "GameViewController.h"
-#import "DrawPolygon.h"
-
+#import "STPopup/STPopup.h"
+#import "HistoryTableViewController.h"
 #define pi 3.14159265358979323846
 #define radiansToDegrees(x) (180.0 * x / pi)
 
@@ -18,18 +18,25 @@
     操作符：301～
     序号：401～
 */
+typedef struct {
+    NSInteger priorVertexNum;
+    NSInteger priorVertexValue;
+    NSInteger deletedEdgeNum;
+    NSInteger nextVertexNum;
+    NSInteger nextVertexValue;
+}DeleteStep;
 
 @interface GameViewController () {
-    int vertexNum;
+    NSInteger vertexNum;
     NSMutableArray *vertexValues; // 顶点数值
     NSMutableArray *operatorValues; // 操作符
     NSMutableArray *vertexPosition; // 顶点位置
     NSMutableArray *allValues; // 顶点数值和操作符
+    NSMutableArray *historyArray; // 存放历史删除步骤DeleteStep
 
     BOOL isFirstStep;
-    long firstStepRmEdge;
+    NSInteger firstStepRmEdge;
 }
-
 
 @end
 
@@ -39,13 +46,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // 初始化
     vertexNum = [self.vertexNumStr intValue];
     isFirstStep = YES;
-    
     vertexValues = [[NSMutableArray alloc]init];
     operatorValues = [[NSMutableArray alloc]init];
     vertexPosition = [[NSMutableArray alloc]init];
     allValues = [[NSMutableArray alloc]init];
+    historyArray = [[NSMutableArray alloc]init];
+    self.revokeButton.enabled = NO;
+    self.historyButton.enabled = NO;
+    
     
     // 创建vertexValues数组和operatorValues数组
     if (self.vertexStr) {
@@ -62,7 +73,6 @@
     } else {
         // 随机生成数组
         [self createVerAndOpeRandomly];
-
     }
     
     // 创建allValues数组
@@ -70,8 +80,7 @@
         [allValues addObject: [vertexValues objectAtIndex:i]];
         [allValues addObject: [operatorValues objectAtIndex:i]];
     }
-    NSLog(@"all: %@", allValues);
-
+    
     // 绘图
     [self drawPolygon];
     
@@ -107,13 +116,13 @@
 - (void)drawPolygon {
     
     // 整体大小
-    int radiusOfCanvas = 100;
+    NSInteger radiusOfCanvas = 100;
     if (vertexNum >= 10) {
         radiusOfCanvas = radiusOfCanvas + vertexNum * 3;
     }
     
     // 规定圈圈大小
-    int radiusOfCircle = 20;
+    NSInteger radiusOfCircle = 20;
     if (vertexNum >= 10) {
         radiusOfCircle = radiusOfCircle - vertexNum + 10;
     }
@@ -147,7 +156,7 @@
     // 画线和序号和操作符
     for (int i = 0; i < vertexNum; i++) {
         
-        int j = (i != vertexNum-1 ? i + 1 : 0);
+        NSInteger j = (i != vertexNum-1 ? i + 1 : 0);
         // 画连线
         float rads = [self angleForStartPoint:CGPointFromString(vertexPosition[i]) EndPoint:CGPointFromString(vertexPosition[j])];
         float distance = [self distanceBetweenPiontA:CGPointFromString(vertexPosition[i]) andPointB:CGPointFromString(vertexPosition[j])] - 2 * radiusOfCircle;
@@ -264,15 +273,27 @@
 // 按下后在里面抬起，删除
 - (void)edgeTouchUpInside:(UIButton *)button {
     
-    long tag = button.tag;
+    NSInteger tag = button.tag;
     UILabel *numLabel = (UILabel *)[self.contentView viewWithTag:tag+100];
     UILabel *operatorLabel = (UILabel *)[self.contentView viewWithTag:tag+200];
     
-    long index = (tag - 200) * 2 -1;
+   NSInteger index = (tag - 200) * 2 -1;
     
     if (isFirstStep) {
         // 第1步，删除掉一条边
-
+        // 将要删除的边加入到historyArrary数组中
+        DeleteStep delete;
+        delete.deletedEdgeNum = tag-200;
+        delete.priorVertexNum = NSIntegerMax;
+        delete.priorVertexValue = NSIntegerMax;
+        delete.nextVertexNum = NSIntegerMax;
+        delete.nextVertexValue = NSIntegerMax;
+        //将结构体封装成value对象
+        NSValue *value = [NSValue valueWithBytes:&delete objCType:@encode(DeleteStep)];
+        [historyArray addObject:value];
+        self.revokeButton.enabled = YES;
+        self.historyButton.enabled = YES;
+        
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             button.transform = CGAffineTransformMakeScale(0.1, 0.1);
             numLabel.transform = CGAffineTransformMakeScale(0.1, 0.1);
@@ -293,13 +314,14 @@
         [allValues replaceObjectAtIndex:index withObject:[NSNull null]];
         isFirstStep = NO;
         firstStepRmEdge = index;
-
+        
+       
     } else {
         // 随后的n-1步
         // 获取 两个数值和一个操作符
-        long ix = index;
-        long jx = (ix == 0) ? allValues.count-1 : index-1; // 前数
-        long kx = (ix == allValues.count - 1) ? 0 : index+1; // 后数
+       NSInteger ix = index;
+       NSInteger jx = (ix == 0) ? allValues.count-1 : index-1; // 前数
+       NSInteger kx = (ix == allValues.count - 1) ? 0 : index+1; // 后数
         
         while ([allValues objectAtIndex:jx] == [NSNull null]) {
             if (jx == 0) {
@@ -320,17 +342,27 @@
         }
         
         NSString *op = [allValues objectAtIndex:ix];
-        NSInteger priorInt = [[allValues objectAtIndex:jx] integerValue];
-        NSInteger nextInt = [[allValues objectAtIndex:kx] integerValue];
+        NSInteger priorValue = [[allValues objectAtIndex:jx] integerValue];
+        NSInteger nextValue = [[allValues objectAtIndex:kx] integerValue];
         UIButton *priorVertexButton = (UIButton *)[self.view viewWithTag: jx/2+1+100];
         UIButton *nextVertexButton = (UIButton *)[self.view viewWithTag: kx/2+1+100];
         NSInteger result = 0;
         
+        // 将要删除的边加入到historyArrary数组中
+        DeleteStep delete;
+        delete.deletedEdgeNum = ix / 2 + 1;
+        delete.priorVertexNum = jx / 2 + 1;
+        delete.priorVertexValue = priorValue;
+        delete.nextVertexNum = kx / 2 + 1;
+        delete.nextVertexValue = nextValue;
+        NSValue *value = [NSValue valueWithBytes:&delete objCType:@encode(DeleteStep)];
+        [historyArray addObject:value];
+        
         // 计算
         if ([op isEqualToString:@"+"]) {
-            result = priorInt + nextInt;
+            result = priorValue + nextValue;
         } else if ([op isEqualToString:@"*"]) {
-            result = priorInt * nextInt;
+            result = priorValue * nextValue;
         }
         NSLog(@"result: %ld", (long)result);
         
@@ -341,6 +373,8 @@
         [allValues replaceObjectAtIndex:jx withObject:[NSNumber numberWithInteger:result]];
         [allValues replaceObjectAtIndex:ix withObject:[NSNull null]];
         [allValues replaceObjectAtIndex:kx withObject:[NSNull null]];
+        
+        
         
         // 移除后点和边
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -365,8 +399,8 @@
         
         
         // 判断是否结束
-        int nullCount = 0;
-        int score = 0;
+       NSInteger nullCount = 0;
+       NSInteger score = 0;
         for (int i = 1; i < allValues.count; i+=2) {
             if ([allValues objectAtIndex:i] == [NSNull null]) {
                 nullCount++;
@@ -382,7 +416,7 @@
                 }
             }
             
-            long theOnlyVertexNum = 0;
+           NSInteger theOnlyVertexNum = 0;
             for (int i = 0; i < allValues.count; i+=2) {
                 if ([allValues objectAtIndex:i] != [NSNull null]) {
                     theOnlyVertexNum = (i+1)/2 + 1;
@@ -414,10 +448,10 @@
         } else {
             // 没结束
             // 移动边
-            long moveEdgeNum;
-            long theOtherVertexNum;
+           NSInteger moveEdgeNum;
+           NSInteger theOtherVertexNum;
             BOOL needMove = YES;
-            long nextEdge = (ix == allValues.count - 1) ? 1 : ix+2;
+           NSInteger nextEdge = (ix == allValues.count - 1) ? 1 : ix+2;
             NSLog(@"%ld", nextEdge);
             if (nextEdge == firstStepRmEdge) {
                 needMove = NO;
@@ -436,12 +470,12 @@
             
             if (needMove) {
                 moveEdgeNum = (nextEdge + 1) / 2; // 第moveEdgeNum条
-                long theVertexNum = jx / 2 + 1;  // 第theVertexNum个顶点
+                NSInteger theVertexNum = jx / 2 + 1;  // 第theVertexNum个顶点
                 theOtherVertexNum = (moveEdgeNum+1 > vertexValues.count) ? ((moveEdgeNum+1) - vertexValues.count) :moveEdgeNum+1; // 第theOtherVertexNum个顶点
                 NSLog(@"要移动的边: %ld", moveEdgeNum);
                 NSLog(@"第%ld个顶点, 第%ld个顶点", theVertexNum, theOtherVertexNum);
                 // 规定圈圈大小
-                int radiusOfCircle = 20;
+                NSInteger radiusOfCircle = 20;
                 if (vertexNum >= 10) {
                     radiusOfCircle = radiusOfCircle - vertexNum + 10;
                 }
@@ -533,7 +567,14 @@
  
     }
     
-    NSLog(@"all: %@", allValues);
+
+    NSLog(@"history:\n");
+    for (NSValue *value in historyArray) {
+        DeleteStep s ;
+        [value getValue:&s];
+        NSLog(@"prior:%ld value: %ld, deleted: %ld, next: %ld value: %ld", (long)s.priorVertexNum, (long)s.priorVertexValue, (long)s.deletedEdgeNum, (long)s.nextVertexNum, (long)s.nextVertexValue);
+    }
+    NSLog(@"\n");
 
 }
 
@@ -575,12 +616,91 @@
         [allValues addObject: [operatorValues objectAtIndex:i]];
     }
     NSLog(@"all: %@", allValues);
+    
+    // 将historyArray清空
+    [historyArray removeAllObjects];
+    self.revokeButton.enabled = NO;
+    self.historyButton.enabled = NO;
+
     // 绘图
     [self drawPolygon];
     isFirstStep = YES;
-    self.yourScoreLabel.text = @"正在进行";
+    
+    // 得分label
+    CGRect original = self.yourScoreLabel.frame;
+    [UIView animateWithDuration:0.4 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.yourScoreLabel.frame = CGRectMake(original.origin.x, original.origin.y + 30, original.size.width, original.size.height);
+        self.yourScoreLabel.transform = CGAffineTransformMakeScale(0.1, 0.1);
+        
+    } completion:^(BOOL finished) {
+        self.yourScoreLabel.transform = CGAffineTransformMakeScale(1, 1);
+        self.yourScoreLabel.text = @"正在进行";
+        self.yourScoreLabel.frame =  CGRectMake(original.origin.x, original.origin.y -20, original.size.width, original.size.height);
+        [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.yourScoreLabel.textColor = [UIColor blackColor];
+            self.yourScoreLabel.frame = original;
+        } completion:^(BOOL finished) {
+        }];
+    }];
+
 }
 
+- (IBAction)revokeBtnClicked:(UIButton *)sender {
+    
+    DeleteStep s;
+    [[historyArray lastObject] getValue:&s];
+    NSLog(@"edge:%ld", (long)s.deletedEdgeNum);
+    NSLog(@"prior:%ld", (long)s.priorVertexNum);
+    NSLog(@"next:%ld", (long)s.nextVertexNum);
+    [historyArray removeLastObject];
+    
+   // 1. 如果跟第一步相同，则只要画一条边
+   // 2. 
+
+}
+
+- (IBAction)historyBtnClicked:(UIButton *)sender {
+    
+    STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:[HistoryTableViewController new]];
+    popupController.transitionStyle = STPopupTransitionStyleCustom;
+//    popupController.navigationBar.tintColor = [UIColor colorWithRed:236.0/255.0 green:77.0/255.0 blue:91.0/255.0 alpha:1.0];
+    popupController.transitioning = self;
+    popupController.containerView.layer.cornerRadius = 4;
+    [popupController presentInViewController:self];
+    
+    //通过通知中心发送通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"toHistory" object:historyArray];
+
+}
+
+#pragma mark - STPopupControllerTransitioning
+
+- (NSTimeInterval)popupControllerTransitionDuration:(STPopupControllerTransitioningContext *)context
+{
+    return context.action == STPopupControllerTransitioningActionPresent ? 0.5 : 0.35;
+}
+
+- (void)popupControllerAnimateTransition:(STPopupControllerTransitioningContext *)context completion:(void (^)())completion
+{
+    UIView *containerView = context.containerView;
+    if (context.action == STPopupControllerTransitioningActionPresent) {
+        containerView.transform = CGAffineTransformMakeTranslation(containerView.superview.bounds.size.width - containerView.frame.origin.x, 0);
+        
+        [UIView animateWithDuration:[self popupControllerTransitionDuration:context] delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            context.containerView.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            completion();
+        }];
+    }
+    else {
+        [UIView animateWithDuration:[self popupControllerTransitionDuration:context] delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            containerView.transform = CGAffineTransformMakeTranslation(- 2 * (containerView.superview.bounds.size.width - containerView.frame.origin.x), 0);
+        } completion:^(BOOL finished) {
+            containerView.transform = CGAffineTransformIdentity;
+            completion();
+        }];
+    }
+}
 
 
 - (void)didReceiveMemoryWarning {

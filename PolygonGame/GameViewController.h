@@ -16,7 +16,11 @@
 @property (nonatomic, strong) NSString *vertexNumStr;
 @property (nonatomic, strong) NSString *vertexStr;
 @property (nonatomic, strong) NSString *operatorStr;
+@property (weak, nonatomic) IBOutlet UIButton *revokeButton;
+@property (weak, nonatomic) IBOutlet UIButton *historyButton;
 - (IBAction)backBtnClicked:(UIButton *)sender;
 - (IBAction)againBtnClicked:(UIButton *)sender;
+- (IBAction)revokeBtnClicked:(UIButton *)sender;
+- (IBAction)historyBtnClicked:(UIButton *)sender;
 
 @end
