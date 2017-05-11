@@ -1,5 +1,5 @@
 //
-//  HistoryStepTableViewCell.h
+//  StepCell.h
 //  PolygonGame
 //
 //  Created by boxytt on 2017/5/10.
@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HistoryStepTableViewCell : UITableViewCell
+@interface StepCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *numLabel;
 @property (weak, nonatomic) IBOutlet UILabel *operationLabel;
-
 @end

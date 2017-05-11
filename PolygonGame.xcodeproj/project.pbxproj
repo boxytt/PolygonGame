@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		871776EC1EBA1C540081F05E /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 871776EB1EBA1C540081F05E /* HomeViewController.m */; };
 		871776EF1EBA1CAF0081F05E /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 871776EE1EBA1CAF0081F05E /* GameViewController.m */; };
-		876A365D1EC2212C00C755B4 /* HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 876A365B1EC2212C00C755B4 /* HistoryTableViewController.m */; };
-		876A36621EC2248100C755B4 /* HistoryStepTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 876A36601EC2248100C755B4 /* HistoryStepTableViewCell.m */; };
-		876A36631EC2248100C755B4 /* HistoryStepTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 876A36611EC2248100C755B4 /* HistoryStepTableViewCell.xib */; };
+		8771DB801EC3347400347E90 /* StepCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8771DB7E1EC3347400347E90 /* StepCell.m */; };
+		8771DB811EC3347400347E90 /* StepCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8771DB7F1EC3347400347E90 /* StepCell.xib */; };
+		8771DB841EC3348100347E90 /* StepTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8771DB831EC3348100347E90 /* StepTableViewController.m */; };
 		879A8BE71EB8D22A000FB1FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 879A8BE61EB8D22A000FB1FD /* main.m */; };
 		879A8BEA1EB8D22A000FB1FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 879A8BE91EB8D22A000FB1FD /* AppDelegate.m */; };
 		879A8BF01EB8D22A000FB1FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 879A8BEE1EB8D22A000FB1FD /* Main.storyboard */; };
@@ -26,11 +26,11 @@
 		871776EB1EBA1C540081F05E /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		871776ED1EBA1CAF0081F05E /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		871776EE1EBA1CAF0081F05E /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
-		876A365A1EC2212C00C755B4 /* HistoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryTableViewController.h; sourceTree = "<group>"; };
-		876A365B1EC2212C00C755B4 /* HistoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryTableViewController.m; sourceTree = "<group>"; };
-		876A365F1EC2248100C755B4 /* HistoryStepTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryStepTableViewCell.h; sourceTree = "<group>"; };
-		876A36601EC2248100C755B4 /* HistoryStepTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryStepTableViewCell.m; sourceTree = "<group>"; };
-		876A36611EC2248100C755B4 /* HistoryStepTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HistoryStepTableViewCell.xib; sourceTree = "<group>"; };
+		8771DB7D1EC3347400347E90 /* StepCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StepCell.h; sourceTree = "<group>"; };
+		8771DB7E1EC3347400347E90 /* StepCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StepCell.m; sourceTree = "<group>"; };
+		8771DB7F1EC3347400347E90 /* StepCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StepCell.xib; sourceTree = "<group>"; };
+		8771DB821EC3348100347E90 /* StepTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StepTableViewController.h; sourceTree = "<group>"; };
+		8771DB831EC3348100347E90 /* StepTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StepTableViewController.m; sourceTree = "<group>"; };
 		879A8BE21EB8D22A000FB1FD /* PolygonGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PolygonGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		879A8BE61EB8D22A000FB1FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		879A8BE81EB8D22A000FB1FD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -91,11 +91,11 @@
 				871776EB1EBA1C540081F05E /* HomeViewController.m */,
 				871776ED1EBA1CAF0081F05E /* GameViewController.h */,
 				871776EE1EBA1CAF0081F05E /* GameViewController.m */,
-				876A365A1EC2212C00C755B4 /* HistoryTableViewController.h */,
-				876A365B1EC2212C00C755B4 /* HistoryTableViewController.m */,
-				876A365F1EC2248100C755B4 /* HistoryStepTableViewCell.h */,
-				876A36601EC2248100C755B4 /* HistoryStepTableViewCell.m */,
-				876A36611EC2248100C755B4 /* HistoryStepTableViewCell.xib */,
+				8771DB821EC3348100347E90 /* StepTableViewController.h */,
+				8771DB831EC3348100347E90 /* StepTableViewController.m */,
+				8771DB7D1EC3347400347E90 /* StepCell.h */,
+				8771DB7E1EC3347400347E90 /* StepCell.m */,
+				8771DB7F1EC3347400347E90 /* StepCell.xib */,
 				879A8BEE1EB8D22A000FB1FD /* Main.storyboard */,
 				879A8BF11EB8D22A000FB1FD /* Assets.xcassets */,
 				879A8BF31EB8D22A000FB1FD /* LaunchScreen.storyboard */,
@@ -183,9 +183,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8771DB811EC3347400347E90 /* StepCell.xib in Resources */,
 				879A8BF51EB8D22A000FB1FD /* LaunchScreen.storyboard in Resources */,
 				879A8BF21EB8D22A000FB1FD /* Assets.xcassets in Resources */,
-				876A36631EC2248100C755B4 /* HistoryStepTableViewCell.xib in Resources */,
 				879A8BF01EB8D22A000FB1FD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -247,10 +247,10 @@
 			files = (
 				871776EF1EBA1CAF0081F05E /* GameViewController.m in Sources */,
 				879A8BEA1EB8D22A000FB1FD /* AppDelegate.m in Sources */,
+				8771DB801EC3347400347E90 /* StepCell.m in Sources */,
 				879A8BE71EB8D22A000FB1FD /* main.m in Sources */,
 				871776EC1EBA1C540081F05E /* HomeViewController.m in Sources */,
-				876A36621EC2248100C755B4 /* HistoryStepTableViewCell.m in Sources */,
-				876A365D1EC2212C00C755B4 /* HistoryTableViewController.m in Sources */,
+				8771DB841EC3348100347E90 /* StepTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

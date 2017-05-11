@@ -22,5 +22,7 @@
 - (IBAction)againBtnClicked:(UIButton *)sender;
 - (IBAction)revokeBtnClicked:(UIButton *)sender;
 - (IBAction)historyBtnClicked:(UIButton *)sender;
+@property (weak, nonatomic) IBOutlet UIButton *highestButton;
+- (IBAction)highestBtnClicked:(UIButton *)sender;
 
 @end

@@ -1,14 +1,14 @@
 //
-//  HistoryStepTableViewCell.m
+//  StepCell.m
 //  PolygonGame
 //
 //  Created by boxytt on 2017/5/10.
 //  Copyright © 2017年 boxytt. All rights reserved.
 //
 
-#import "HistoryStepTableViewCell.h"
+#import "StepCell.h"
 
-@implementation HistoryStepTableViewCell
+@implementation StepCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

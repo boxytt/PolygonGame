@@ -51,6 +51,9 @@
     self.specifyButton.enabled = NO;
     UITextField *valueTextField = [[UITextField alloc]initWithFrame:CGRectMake(self.view.bounds.size.width, self.specifyButton.frame.origin.y + 33 + 10, self.view.bounds.size.width - 120, 30)];
     valueTextField.font = [UIFont systemFontOfSize:14];
+    if (self.view.bounds.size.width == 320) {
+        valueTextField.font = [UIFont systemFontOfSize:13];
+    }
     valueTextField.borderStyle = UITextBorderStyleRoundedRect;
     valueTextField.placeholder = [NSString stringWithFormat:@"输入%@个顶点的值，用空格隔开", self.vertexNumTextField.text];
     valueTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
@@ -61,8 +64,11 @@
     
     UITextField *operatorTextField = [[UITextField alloc]initWithFrame:CGRectMake(self.view.bounds.size.width, self.specifyButton.frame.origin.y + 33 + 10 + 30 + 10, self.view.bounds.size.width - 120, 30)];
     operatorTextField.font = [UIFont systemFontOfSize:14];
+    if (self.view.bounds.size.width == 320) {
+        operatorTextField.font = [UIFont systemFontOfSize:13];
+    }
     operatorTextField.borderStyle = UITextBorderStyleRoundedRect;
-    operatorTextField.placeholder = [NSString stringWithFormat:@"输入%@条横线上的操作符，用空格隔开", self.vertexNumTextField.text];
+    operatorTextField.placeholder = [NSString stringWithFormat:@"输入%@个操作符，用空格隔开", self.vertexNumTextField.text];
     operatorTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     operatorTextField.inputAccessoryView = [[UIView alloc] init];
     operatorTextField.tag = 002;

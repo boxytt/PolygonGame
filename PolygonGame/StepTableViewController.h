@@ -1,5 +1,5 @@
 //
-//  HistoryTableViewController.h
+//  StepTableViewController.h
 //  PolygonGame
 //
 //  Created by boxytt on 2017/5/10.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HistoryTableViewController : UITableViewController
+@interface StepTableViewController : UITableViewController
 
 @end
