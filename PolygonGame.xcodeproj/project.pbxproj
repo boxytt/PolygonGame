@@ -9,9 +9,17 @@
 /* Begin PBXBuildFile section */
 		871776EC1EBA1C540081F05E /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 871776EB1EBA1C540081F05E /* HomeViewController.m */; };
 		871776EF1EBA1CAF0081F05E /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 871776EE1EBA1CAF0081F05E /* GameViewController.m */; };
+		874CB75F1EC5B246007FDD03 /* Wawati SC.otf in Resources */ = {isa = PBXBuildFile; fileRef = 874CB75D1EC5B1FE007FDD03 /* Wawati SC.otf */; };
+		874CB7611EC5D99F007FDD03 /* cloud2.png in Resources */ = {isa = PBXBuildFile; fileRef = 874CB7601EC5D99F007FDD03 /* cloud2.png */; };
+		874CB76B1EC5E0BB007FDD03 /* textField.png in Resources */ = {isa = PBXBuildFile; fileRef = 874CB76A1EC5E0BB007FDD03 /* textField.png */; };
 		8771DB801EC3347400347E90 /* StepCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8771DB7E1EC3347400347E90 /* StepCell.m */; };
 		8771DB811EC3347400347E90 /* StepCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8771DB7F1EC3347400347E90 /* StepCell.xib */; };
 		8771DB841EC3348100347E90 /* StepTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8771DB831EC3348100347E90 /* StepTableViewController.m */; };
+		8771DB891EC54D7E00347E90 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8771DB881EC54D7E00347E90 /* icon.png */; };
+		8771DB911EC58F5800347E90 /* 多边形游戏.png in Resources */ = {isa = PBXBuildFile; fileRef = 8771DB901EC58F5800347E90 /* 多边形游戏.png */; };
+		8771DB991EC5902E00347E90 /* point.png in Resources */ = {isa = PBXBuildFile; fileRef = 8771DB981EC5902E00347E90 /* point.png */; };
+		8771DB9B1EC591F000347E90 /* homeImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8771DB9A1EC591F000347E90 /* homeImage.png */; };
+		8771DB9D1EC593ED00347E90 /* cloud1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8771DB9C1EC593ED00347E90 /* cloud1.png */; };
 		879A8BE71EB8D22A000FB1FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 879A8BE61EB8D22A000FB1FD /* main.m */; };
 		879A8BEA1EB8D22A000FB1FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 879A8BE91EB8D22A000FB1FD /* AppDelegate.m */; };
 		879A8BF01EB8D22A000FB1FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 879A8BEE1EB8D22A000FB1FD /* Main.storyboard */; };
@@ -26,11 +34,19 @@
 		871776EB1EBA1C540081F05E /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		871776ED1EBA1CAF0081F05E /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		871776EE1EBA1CAF0081F05E /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		874CB75D1EC5B1FE007FDD03 /* Wawati SC.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Wawati SC.otf"; sourceTree = "<group>"; };
+		874CB7601EC5D99F007FDD03 /* cloud2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloud2.png; sourceTree = "<group>"; };
+		874CB76A1EC5E0BB007FDD03 /* textField.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = textField.png; sourceTree = "<group>"; };
 		8771DB7D1EC3347400347E90 /* StepCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StepCell.h; sourceTree = "<group>"; };
 		8771DB7E1EC3347400347E90 /* StepCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StepCell.m; sourceTree = "<group>"; };
 		8771DB7F1EC3347400347E90 /* StepCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StepCell.xib; sourceTree = "<group>"; };
 		8771DB821EC3348100347E90 /* StepTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StepTableViewController.h; sourceTree = "<group>"; };
 		8771DB831EC3348100347E90 /* StepTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StepTableViewController.m; sourceTree = "<group>"; };
+		8771DB881EC54D7E00347E90 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		8771DB901EC58F5800347E90 /* 多边形游戏.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "多边形游戏.png"; sourceTree = "<group>"; };
+		8771DB981EC5902E00347E90 /* point.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = point.png; sourceTree = "<group>"; };
+		8771DB9A1EC591F000347E90 /* homeImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeImage.png; sourceTree = "<group>"; };
+		8771DB9C1EC593ED00347E90 /* cloud1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloud1.png; sourceTree = "<group>"; };
 		879A8BE21EB8D22A000FB1FD /* PolygonGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PolygonGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		879A8BE61EB8D22A000FB1FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		879A8BE81EB8D22A000FB1FD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -64,6 +80,20 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		8771DB851EC54D0200347E90 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				8771DB9C1EC593ED00347E90 /* cloud1.png */,
+				874CB76A1EC5E0BB007FDD03 /* textField.png */,
+				874CB7601EC5D99F007FDD03 /* cloud2.png */,
+				8771DB981EC5902E00347E90 /* point.png */,
+				8771DB9A1EC591F000347E90 /* homeImage.png */,
+				8771DB901EC58F5800347E90 /* 多边形游戏.png */,
+				8771DB881EC54D7E00347E90 /* icon.png */,
+			);
+			name = images;
+			sourceTree = "<group>";
+		};
 		879A8BD91EB8D22A000FB1FD = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +115,7 @@
 		879A8BE41EB8D22A000FB1FD /* PolygonGame */ = {
 			isa = PBXGroup;
 			children = (
+				874CB75D1EC5B1FE007FDD03 /* Wawati SC.otf */,
 				879A8BE81EB8D22A000FB1FD /* AppDelegate.h */,
 				879A8BE91EB8D22A000FB1FD /* AppDelegate.m */,
 				871776EA1EBA1C540081F05E /* HomeViewController.h */,
@@ -97,6 +128,7 @@
 				8771DB7E1EC3347400347E90 /* StepCell.m */,
 				8771DB7F1EC3347400347E90 /* StepCell.xib */,
 				879A8BEE1EB8D22A000FB1FD /* Main.storyboard */,
+				8771DB851EC54D0200347E90 /* images */,
 				879A8BF11EB8D22A000FB1FD /* Assets.xcassets */,
 				879A8BF31EB8D22A000FB1FD /* LaunchScreen.storyboard */,
 				879A8BF61EB8D22A000FB1FD /* Info.plist */,
@@ -183,10 +215,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				874CB75F1EC5B246007FDD03 /* Wawati SC.otf in Resources */,
+				874CB76B1EC5E0BB007FDD03 /* textField.png in Resources */,
+				8771DB911EC58F5800347E90 /* 多边形游戏.png in Resources */,
+				8771DB991EC5902E00347E90 /* point.png in Resources */,
 				8771DB811EC3347400347E90 /* StepCell.xib in Resources */,
+				8771DB891EC54D7E00347E90 /* icon.png in Resources */,
 				879A8BF51EB8D22A000FB1FD /* LaunchScreen.storyboard in Resources */,
+				8771DB9D1EC593ED00347E90 /* cloud1.png in Resources */,
 				879A8BF21EB8D22A000FB1FD /* Assets.xcassets in Resources */,
+				874CB7611EC5D99F007FDD03 /* cloud2.png in Resources */,
 				879A8BF01EB8D22A000FB1FD /* Main.storyboard in Resources */,
+				8771DB9B1EC591F000347E90 /* homeImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

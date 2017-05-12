@@ -36,6 +36,7 @@ typedef struct {
     BOOL isFirstLoad;
     BOOL isFirstStep;
     BOOL isEnd;
+    NSInteger startScore;
     
     NSInteger firstStepRmEdge;
     CGFloat radiusOfCanvas;
@@ -97,6 +98,16 @@ typedef struct {
         [allValues addObject: [operatorValues objectAtIndex:i]];
     }
     
+    // 让分数label显示为当前最高分的点
+    startScore = [vertexValues[0] integerValue];
+    for (int i = 0; i < vertexNum; i++) {
+        if ([vertexValues[i] integerValue] > startScore) {
+            startScore = [vertexValues[i] integerValue];
+        }
+    }
+    self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)startScore];
+    
+    
     // 动态规划计算最高分
 }
 
@@ -148,6 +159,7 @@ typedef struct {
         [vertexButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         vertexButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         [vertexButton setBackgroundImage:[UIImage imageNamed:@"圈"] forState:UIControlStateNormal];
+        
         vertexButton.userInteractionEnabled = NO;
         [self.contentView addSubview:vertexButton];
         
@@ -263,6 +275,7 @@ typedef struct {
     numLabel.textColor = [UIColor redColor];
     operatorLabel.textColor = [UIColor redColor];
     NSLog(@"touch No.%ld button\n", (NSInteger)button.tag);
+
 }
 
 // 按下后在外面抬起，取消删除
@@ -270,7 +283,6 @@ typedef struct {
     NSInteger tag = button.tag;
     UILabel *numLabel = (UILabel *)[self.contentView viewWithTag:tag+100];
     UILabel *operatorLabel = (UILabel *)[self.contentView viewWithTag:tag+200];
-    
     button.backgroundColor = [UIColor blackColor];
     numLabel.textColor = [UIColor blackColor];
     operatorLabel.textColor = [UIColor blackColor];
@@ -284,7 +296,7 @@ typedef struct {
     UILabel *numLabel = (UILabel *)[self.contentView viewWithTag:tag+100];
     UILabel *operatorLabel = (UILabel *)[self.contentView viewWithTag:tag+200];
     
-   NSInteger index = (tag - 200) * 2 -1;
+    NSInteger index = (tag - 200) * 2 -1;
     
     if (isFirstStep) {
         // 第1步，删除掉一条边
@@ -443,7 +455,7 @@ typedef struct {
                 self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)score];
                 self.yourScoreLabel.frame =  CGRectMake(original.origin.x, original.origin.y -20, original.size.width, original.size.height);
                 [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.yourScoreLabel.textColor = [UIColor blackColor];
+                    self.yourScoreLabel.textColor = [UIColor whiteColor];
                     self.yourScoreLabel.frame = original;
                     vertexButton.center = CGPointMake(self.contentView.frame.size.width/2, self.contentView.frame.size.height/2);
                     vertexButton.transform = CGAffineTransformMakeScale(1.3, 1.3);
@@ -522,15 +534,63 @@ typedef struct {
                 CGPoint canvasCenter = CGPointMake(self.contentView.center.x, self.contentView.frame.size.height / 2);
                 CGPoint buttonCenter = newEdage.center;
                 
-                float xOfOperatorLabel;
-                float yOfOperatorLabel;
-                float xOfNumLabel;
-                float yOfNumLabel;
+                CGFloat xOfOperatorLabel = 0.0;
+                CGFloat yOfOperatorLabel = 0.0;
+                CGFloat xOfNumLabel = 0.0;
+                CGFloat yOfNumLabel = 0.0;
                 
-                if ((buttonCenter.x != canvasCenter.x) && (buttonCenter.y != canvasCenter.y)) {
+                if ((buttonCenter.x == canvasCenter.x) && (buttonCenter.y == canvasCenter.y)) {
+                    NSLog(@"#0");
+                    UIButton *theVertexButton = (UIButton *)[self.contentView viewWithTag:100+theVertexNum];
+                    UIButton *theOtherVertexButton = (UIButton *)[self.contentView viewWithTag:100+theOtherVertexNum];
+                    
+                    if (fabs(theVertexButton.center.y - theOtherVertexButton.center.y) < 1.0) {
+                        NSLog(@"#1");
+                        xOfOperatorLabel = buttonCenter.x;
+                        yOfOperatorLabel = buttonCenter.y - 15;
+                        xOfNumLabel = buttonCenter.x;
+                        yOfNumLabel = buttonCenter.y + 15;
+                    } else if (fabs(theVertexButton.center.x - theOtherVertexButton.center.x) < 1.0) {
+                        NSLog(@"#2");
+                        xOfOperatorLabel = buttonCenter.x - 15;
+                        yOfOperatorLabel = buttonCenter.y;
+                        xOfNumLabel = buttonCenter.x + 15;
+                        yOfNumLabel = buttonCenter.y;
+                    } else {
+                        NSLog(@"#3");
+                        // 找到垂直点对称的点
+                        
+                        UIButton *tempButton = (theVertexButton.center.y < theOtherVertexButton.center.y) ? theVertexButton : theOtherVertexButton;
+                        CGFloat aimPointX;
+                        CGFloat aimPointY;
+                        CGPoint aimPoint;
+                        
+                        if (tempButton.center.x - canvasCenter.x < 0) {
+                            // 点在左边
+                            aimPointX = canvasCenter.x - (canvasCenter.y - tempButton.center.y);
+                            aimPointY = canvasCenter.y + (canvasCenter.x - tempButton.center.x);
+                            aimPoint = CGPointMake(aimPointX, aimPointY);
+                            float d = [self distanceBetweenPiontA:aimPoint andPointB:canvasCenter];
+                            xOfOperatorLabel = (d + 15) * (canvasCenter.x - aimPointX) / d + aimPointX;
+                            yOfOperatorLabel = aimPointY - (d + 15) * (aimPointY - canvasCenter.y) / d;
+                            xOfNumLabel = (d - 15) * (canvasCenter.x - aimPointX) / d + aimPointX;
+                            yOfNumLabel = aimPointY - (d - 15) * (aimPointY - canvasCenter.y) / d;
+                        } else {
+                            // 点在右边
+                            aimPointX = canvasCenter.x + (canvasCenter.y - tempButton.center.y);
+                            aimPointY = canvasCenter.y + (canvasCenter.x - tempButton.center.x);
+                            aimPoint = CGPointMake(aimPointX, aimPointY);
+                            float d = [self distanceBetweenPiontA:aimPoint andPointB:canvasCenter];
+                            xOfOperatorLabel = (d + 15) * (canvasCenter.x - aimPointX) / d + aimPointX;
+                            yOfOperatorLabel = aimPointY - (d - 20) * (aimPointY - canvasCenter.y) / d;
+                            xOfNumLabel = (d - 20) * (canvasCenter.x - aimPointX) / d + aimPointX;
+                            yOfNumLabel = aimPointY - (d + 15) * (aimPointY - canvasCenter.y) / d;
+                        }
+                    }
+                } else {
+                    
                     float d = [self distanceBetweenPiontA:canvasCenter andPointB:buttonCenter];
                     float r = [self angleForStartPoint:canvasCenter EndPoint:buttonCenter];
-                    
                     float x0 = d * cos(r);
                     float y0 = d * sin(fabsf(r));
                     if (r < 0) {
@@ -539,17 +599,8 @@ typedef struct {
                     
                     xOfOperatorLabel = (d - 15) / d * x0 + canvasCenter.x;
                     yOfOperatorLabel = (d - 15) / d * y0 + canvasCenter.y;
-                    
                     xOfNumLabel = (d + 15) / d * x0 + canvasCenter.x;
                     yOfNumLabel = (d + 15) / d * y0 + canvasCenter.y;
-                    
-                } else {
-                    // 两个点重合，不能算d和r。出现在分母处
-                    xOfOperatorLabel = buttonCenter.x - 15;
-                    yOfOperatorLabel = buttonCenter.y - 15;
-                    
-                    xOfNumLabel = buttonCenter.x + 15;
-                    yOfNumLabel = buttonCenter.y + 15;
                 }
                 
                 UILabel *operatorLabel = (UILabel *)[self.view viewWithTag:300+moveEdgeNum];
@@ -569,14 +620,45 @@ typedef struct {
  
     }
     
-
-    NSLog(@"history:\n");
-    for (NSValue *value in historyArray) {
-        DeleteStep s ;
-        [value getValue:&s];
-        NSLog(@"prior:%ld value: %ld, deleted: %ld, next: %ld value: %ld", (long)s.priorVertexNum, (long)s.priorVertexValue, (long)s.deletedEdgeNum, (long)s.nextVertexNum, (long)s.nextVertexValue);
+    
+    // 更新分数label
+    NSMutableArray *notNullArray = [[NSMutableArray alloc]init];
+    for (int i = 0; i < vertexNum * 2; i += 2) {
+        if (allValues[i] != [NSNull null]) {
+            [notNullArray addObject:allValues[i]];
+        }
     }
-    NSLog(@"\n");
+    NSInteger max = [notNullArray[0] integerValue];
+    
+    for (int i = 0; i < notNullArray.count; i++) {
+        if ([notNullArray[i] integerValue] > max) {
+            max = [notNullArray[i] integerValue];
+        }
+    }
+    
+    if (![self.yourScoreLabel.text isEqualToString:[NSString stringWithFormat:@"%ld", (long)max]]) {
+        CGRect original = self.yourScoreLabel.frame;
+        [UIView animateWithDuration:0.4 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            self.yourScoreLabel.frame = CGRectMake(original.origin.x, original.origin.y + 30, original.size.width, original.size.height);
+            self.yourScoreLabel.transform = CGAffineTransformMakeScale(0.1, 0.1);
+            
+        } completion:^(BOOL finished) {
+            self.yourScoreLabel.transform = CGAffineTransformMakeScale(1, 1);
+            
+            self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)max];
+            self.yourScoreLabel.frame =  CGRectMake(original.origin.x, original.origin.y -20, original.size.width, original.size.height);
+            [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.yourScoreLabel.textColor = [UIColor whiteColor];
+                self.yourScoreLabel.frame = original;
+            } completion:^(BOOL finished) {
+            }];
+        }];
+        
+
+    }
+    
+    
+    
 
 }
 
@@ -585,6 +667,13 @@ typedef struct {
 
 // 返回主页
 - (IBAction)backBtnClicked:(UIButton *)sender {
+    
+    CATransition *animation = [CATransition animation];
+    animation.duration = 0.5;
+    animation.timingFunction = UIViewAnimationCurveEaseInOut;
+    animation.type = @"rippleEffect";
+    animation.subtype = kCATransitionFromLeft;
+    [self.view.window.layer addAnimation:animation forKey:nil];
     
     [self dismissViewControllerAnimated:YES completion:^{
         self.vertexNumStr = @"";
@@ -624,10 +713,10 @@ typedef struct {
         
     } completion:^(BOOL finished) {
         self.yourScoreLabel.transform = CGAffineTransformMakeScale(1, 1);
-        self.yourScoreLabel.text = @"正在进行";
+        self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)startScore];
         self.yourScoreLabel.frame =  CGRectMake(original.origin.x, original.origin.y -20, original.size.width, original.size.height);
         [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.yourScoreLabel.textColor = [UIColor blackColor];
+            self.yourScoreLabel.textColor = [UIColor whiteColor];
             self.yourScoreLabel.frame = original;
         } completion:^(BOOL finished) {
         }];
@@ -782,11 +871,10 @@ typedef struct {
                 
             } completion:^(BOOL finished) {
                 self.yourScoreLabel.transform = CGAffineTransformMakeScale(1, 1);
-                
-                self.yourScoreLabel.text = @"正在进行";
+                self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)startScore];
                 self.yourScoreLabel.frame =  CGRectMake(original.origin.x, original.origin.y -20, original.size.width, original.size.height);
                 [UIView animateWithDuration:0.4 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.yourScoreLabel.textColor = [UIColor blackColor];
+                    self.yourScoreLabel.textColor = [UIColor whiteColor];
                     self.yourScoreLabel.frame = original;
                     priorVertexButton.center = CGPointFromString(vertexPosition[priorVertexNum-1]);
                     priorVertexButton.transform = CGAffineTransformMakeScale(0.98, 0.98);
@@ -913,9 +1001,8 @@ typedef struct {
     
     //通过通知中心发送通知
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"toStep" object:];
-    
-    
 }
+
 
 #pragma mark - STPopupControllerTransitioning
 

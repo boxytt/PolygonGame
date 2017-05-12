@@ -11,9 +11,12 @@
 @interface HomeViewController : UIViewController
 
 
-@property (weak, nonatomic) IBOutlet UITextField *vertexNumTextField;
-@property (weak, nonatomic) IBOutlet UIButton *createButton;
-@property (weak, nonatomic) IBOutlet UIButton *specifyButton;
 
-- (IBAction)SpecifyBtnClicked:(UIButton *)sender;
+@property (weak, nonatomic) UIButton *createButton;
+@property (weak, nonatomic) UIButton *specifyButton;
+@property (weak, nonatomic) UIPickerView *vertexNumPicker;
+@property (nonatomic, strong) UILabel *vertexNumLabel;
+@property (nonatomic, strong) UIImageView *gameNameImageView;
+@property (nonatomic, strong) UIImageView *earthImageView;
+
 @end
