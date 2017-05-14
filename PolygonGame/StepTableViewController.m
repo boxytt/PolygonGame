@@ -36,7 +36,7 @@ typedef struct {
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.title = @"步骤";
+        self.title = @"历史步骤";
         
         self.contentSizeInPopup = CGSizeMake(300, 400);
 
@@ -44,6 +44,8 @@ typedef struct {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getStep:) name:@"toStep" object:nil];
         
         self.tableView.tableFooterView = [[UIView alloc]init];
+
+        self.tableView.separatorColor = [UIColor orangeColor];
         
         // cell自适应高度，需要在xib中设置上下约束
         self.tableView.estimatedRowHeight = 44;  //  随便设个不那么离谱的值
@@ -82,7 +84,9 @@ typedef struct {
     DeleteStep step;
     [[self.stepArray objectAtIndex:indexPath.row] getValue:&step];
     cell.numLabel.text = [NSString stringWithFormat:@"第%ld步", indexPath.row + 1];
+    cell.numLabel.font = [UIFont fontWithName:@"DFWaWaSC-W5" size:15];
     cell.operationLabel.text = [NSString stringWithFormat:@"移除第%ld条边", (long)step.deletedEdgeNum];
+    cell.operationLabel.font = [UIFont fontWithName:@"DFWaWaSC-W5" size:20];
     return cell;
 }
 

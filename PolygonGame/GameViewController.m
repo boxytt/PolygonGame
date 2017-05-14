@@ -9,6 +9,7 @@
 #import "GameViewController.h"
 #import "STPopup/STPopup.h"
 #import "StepTableViewController.h"
+#import "StepDemoViewController.h"
 #define pi 3.14159265358979323846
 #define radiansToDegrees(x) (180.0 * x / pi)
 
@@ -17,6 +18,7 @@
     线：201～
     操作符：301～
     序号：401～
+    按钮：501～505
 */
 typedef struct {
     NSInteger priorVertexNum;
@@ -33,6 +35,7 @@ typedef struct {
     NSMutableArray *vertexPosition; // 顶点位置
     NSMutableArray *allValues; // 顶点数值和操作符
     NSMutableArray *historyArray; // 存放历史删除步骤DeleteStep
+    NSArray *highestArray; // 存放最高分步骤
     BOOL isFirstLoad;
     BOOL isFirstStep;
     BOOL isEnd;
@@ -61,8 +64,10 @@ typedef struct {
     vertexPosition = [[NSMutableArray alloc]init];
     allValues = [[NSMutableArray alloc]init];
     historyArray = [[NSMutableArray alloc]init];
+    self.againButton.enabled = NO;
     self.revokeButton.enabled = NO;
     self.historyButton.enabled = NO;
+    
     // 整体大小
     radiusOfCanvas = 100;
     if (vertexNum >= 10) {
@@ -107,8 +112,8 @@ typedef struct {
     }
     self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)startScore];
     
-    
     // 动态规划计算最高分
+    highestArray = [[NSArray alloc]initWithObjects:@"1", @"2", @"3", @"4", @"5", nil];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -157,6 +162,7 @@ typedef struct {
         vertexButton.tag = 101 + i;
         [vertexButton setTitle:[NSString stringWithFormat:@"%d", [vertexValues[i] intValue]] forState:UIControlStateNormal];
         [vertexButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        vertexButton.titleLabel.font = [UIFont fontWithName:@"DFWaWaSC-W5" size:18];
         vertexButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         [vertexButton setBackgroundImage:[UIImage imageNamed:@"圈"] forState:UIControlStateNormal];
         
@@ -211,17 +217,20 @@ typedef struct {
         float xOfNumLabel = (d + 15) / d * x0 + canvasCenter.x;
         float yOfNumLabel = (d + 15) / d * y0 + canvasCenter.y;
         
-        UILabel *operatorLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 10, 20)];
+        UILabel *operatorLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 8, 20)];
         operatorLabel.tag = 301 + i;
         operatorLabel.center = CGPointMake(xOfOperatorLabel, yOfOperatorLabel);
         operatorLabel.text = [NSString stringWithFormat:@"%@", operatorValues[i]];
+        operatorLabel.font = [UIFont fontWithName:@"DFWaWaSC-W5" size:18];
         operatorLabel.textColor = [UIColor clearColor];
         [self.contentView addSubview:operatorLabel];
         
-        UILabel *numLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+        UILabel *numLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 26, 20)];
         numLabel.tag = 401 + i;
         numLabel.center = CGPointMake(xOfNumLabel, yOfNumLabel);
         numLabel.text = [NSString stringWithFormat:@"%d", i+1];
+        numLabel.font = [UIFont fontWithName:@"DFWaWaSC-W5" size:18];
+        numLabel.textAlignment = NSTextAlignmentCenter;
         numLabel.textColor = [UIColor clearColor];
         [self.contentView addSubview:numLabel];
 
@@ -274,7 +283,6 @@ typedef struct {
     button.backgroundColor = [UIColor redColor];
     numLabel.textColor = [UIColor redColor];
     operatorLabel.textColor = [UIColor redColor];
-    NSLog(@"touch No.%ld button\n", (NSInteger)button.tag);
 
 }
 
@@ -310,6 +318,7 @@ typedef struct {
         //将结构体封装成value对象
         NSValue *value = [NSValue valueWithBytes:&delete objCType:@encode(DeleteStep)];
         [historyArray addObject:value];
+        self.againButton.enabled = YES;
         self.revokeButton.enabled = YES;
         self.historyButton.enabled = YES;
         
@@ -386,7 +395,15 @@ typedef struct {
         NSLog(@"result: %ld", (long)result);
         
         // 将结果赋给前一个点
-        [priorVertexButton setTitle:[NSString stringWithFormat:@"%ld", (long)result] forState:UIControlStateNormal];
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+            priorVertexButton.transform = CGAffineTransformMakeScale(1.3, 1.3);
+            [priorVertexButton setTitle:[NSString stringWithFormat:@"%ld", (long)result] forState:UIControlStateNormal];
+
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.1 animations:^{
+                priorVertexButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
+            } completion:nil];
+        }];
         
         // 将结果赋值给前点，将数组中边和后点对应位置置NULL
         [allValues replaceObjectAtIndex:jx withObject:[NSNumber numberWithInteger:result]];
@@ -451,16 +468,15 @@ typedef struct {
                
             } completion:^(BOOL finished) {
                 self.yourScoreLabel.transform = CGAffineTransformMakeScale(1, 1);
-
                 self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)score];
                 self.yourScoreLabel.frame =  CGRectMake(original.origin.x, original.origin.y -20, original.size.width, original.size.height);
-                [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.3 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                     self.yourScoreLabel.textColor = [UIColor whiteColor];
                     self.yourScoreLabel.frame = original;
                     vertexButton.center = CGPointMake(self.contentView.frame.size.width/2, self.contentView.frame.size.height/2);
                     vertexButton.transform = CGAffineTransformMakeScale(1.3, 1.3);
                 } completion:^(BOOL finished) {
-                }];
+                                   }];
             }];
             
         } else {
@@ -533,33 +549,26 @@ typedef struct {
                 // 计算序号和操作符的位置
                 CGPoint canvasCenter = CGPointMake(self.contentView.center.x, self.contentView.frame.size.height / 2);
                 CGPoint buttonCenter = newEdage.center;
-                
                 CGFloat xOfOperatorLabel = 0.0;
                 CGFloat yOfOperatorLabel = 0.0;
                 CGFloat xOfNumLabel = 0.0;
                 CGFloat yOfNumLabel = 0.0;
                 
-                if ((buttonCenter.x == canvasCenter.x) && (buttonCenter.y == canvasCenter.y)) {
-                    NSLog(@"#0");
+                if ((fabs(buttonCenter.x - canvasCenter.x) < 0.1) && (fabs(buttonCenter.y - canvasCenter.y) < 0.1)) {
                     UIButton *theVertexButton = (UIButton *)[self.contentView viewWithTag:100+theVertexNum];
                     UIButton *theOtherVertexButton = (UIButton *)[self.contentView viewWithTag:100+theOtherVertexNum];
-                    
                     if (fabs(theVertexButton.center.y - theOtherVertexButton.center.y) < 1.0) {
-                        NSLog(@"#1");
                         xOfOperatorLabel = buttonCenter.x;
                         yOfOperatorLabel = buttonCenter.y - 15;
                         xOfNumLabel = buttonCenter.x;
                         yOfNumLabel = buttonCenter.y + 15;
                     } else if (fabs(theVertexButton.center.x - theOtherVertexButton.center.x) < 1.0) {
-                        NSLog(@"#2");
                         xOfOperatorLabel = buttonCenter.x - 15;
                         yOfOperatorLabel = buttonCenter.y;
                         xOfNumLabel = buttonCenter.x + 15;
                         yOfNumLabel = buttonCenter.y;
                     } else {
-                        NSLog(@"#3");
                         // 找到垂直点对称的点
-                        
                         UIButton *tempButton = (theVertexButton.center.y < theOtherVertexButton.center.y) ? theVertexButton : theOtherVertexButton;
                         CGFloat aimPointX;
                         CGFloat aimPointY;
@@ -588,7 +597,7 @@ typedef struct {
                         }
                     }
                 } else {
-                    
+
                     float d = [self distanceBetweenPiontA:canvasCenter andPointB:buttonCenter];
                     float r = [self angleForStartPoint:canvasCenter EndPoint:buttonCenter];
                     float x0 = d * cos(r);
@@ -613,13 +622,10 @@ typedef struct {
                 } completion:^(BOOL finished) {
                     
                 }];
-
-                
+ 
             }
         }
- 
     }
-    
     
     // 更新分数label
     NSMutableArray *notNullArray = [[NSMutableArray alloc]init];
@@ -653,21 +659,22 @@ typedef struct {
             } completion:^(BOOL finished) {
             }];
         }];
-        
-
     }
-    
-    
-    
-
 }
-
 
 #pragma mark - 按钮事件
 
 // 返回主页
 - (IBAction)backBtnClicked:(UIButton *)sender {
-    
+    UIView *buttonView = (UIView *)[self.view viewWithTag:502];
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        buttonView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.1 animations:^{
+            buttonView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        } completion:nil];
+    }];
+
     CATransition *animation = [CATransition animation];
     animation.duration = 0.5;
     animation.timingFunction = UIViewAnimationCurveEaseInOut;
@@ -677,12 +684,20 @@ typedef struct {
     
     [self dismissViewControllerAnimated:YES completion:^{
         self.vertexNumStr = @"";
-        
         vertexNum = 0;
     }];
 }
 
 - (IBAction)againBtnClicked:(id)sender {
+    UIView *buttonView = (UIView *)[self.view viewWithTag:503];
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        buttonView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.1 animations:^{
+            buttonView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        } completion:nil];
+    }];
+
     for (UIView *view in [self.contentView subviews]) {
         [view removeFromSuperview];
     }
@@ -697,9 +712,11 @@ typedef struct {
     
     // 将historyArray清空
     [historyArray removeAllObjects];
+    self.againButton.enabled = NO;
     self.revokeButton.enabled = NO;
     self.historyButton.enabled = NO;
 
+    [vertexPosition removeAllObjects];
     // 绘图
     [self drawPolygon];
     isFirstStep = YES;
@@ -725,7 +742,15 @@ typedef struct {
 }
 
 - (IBAction)revokeBtnClicked:(UIButton *)sender {
-    
+    UIView *buttonView = (UIView *)[self.view viewWithTag:504];
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        buttonView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.1 animations:^{
+            buttonView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        } completion:nil];
+    }];
+
     DeleteStep s;
     [[historyArray lastObject] getValue:&s];
     NSInteger priorVertexNum = s.priorVertexNum;
@@ -746,8 +771,6 @@ typedef struct {
     float rads = [self angleForStartPoint:CGPointFromString(vertexPosition[s.priorVertexNum-1]) EndPoint:CGPointFromString(vertexPosition[s.nextVertexNum-1])];
     float distance = [self distanceBetweenPiontA:CGPointFromString(vertexPosition[s.priorVertexNum-1]) andPointB:CGPointFromString(vertexPosition[s.nextVertexNum-1])] - 2 * radiusOfCircle;
     
-    
-
     if ((deletedEdgeNum != firstStepRmEdge / 2 + 1)) {
         // 判断是否后点连着的边要移动
         // 移动的边
@@ -972,6 +995,7 @@ typedef struct {
 
     if (historyArray.count == 0) {
         isFirstStep = YES;
+        self.againButton.enabled = NO;
         self.revokeButton.enabled = NO;
         self.historyButton.enabled = NO;
     }
@@ -979,7 +1003,15 @@ typedef struct {
 }
 
 - (IBAction)historyBtnClicked:(UIButton *)sender {
-    
+    UIView *buttonView = (UIView *)[self.view viewWithTag:505];
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        buttonView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.1 animations:^{
+            buttonView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        } completion:nil];
+    }];
+
     STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:[StepTableViewController new]];
     popupController.transitionStyle = STPopupTransitionStyleCustom;
     popupController.transitioning = self;
@@ -993,14 +1025,30 @@ typedef struct {
 
 - (IBAction)highestBtnClicked:(UIButton *)sender {
     
-    STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:[StepTableViewController new]];
+    UIView *buttonView = (UIView *)[self.view viewWithTag:501];
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        buttonView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.1 animations:^{
+            buttonView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        } completion:nil];
+    }];
+
+    
+    STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:[StepDemoViewController new]];
     popupController.transitionStyle = STPopupTransitionStyleCustom;
     popupController.transitioning = self;
     popupController.containerView.layer.cornerRadius = 4;
     [popupController presentInViewController:self];
     
+    NSMutableArray *array = [[NSMutableArray alloc]init];
+    [array addObject:vertexValues];
+    [array addObject:operatorValues];
+    [array addObject:highestArray];
+//    [array addObject:vertexPosition];
+    
     //通过通知中心发送通知
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"toStep" object:];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"toStepDemo" object:array];
 }
 
 

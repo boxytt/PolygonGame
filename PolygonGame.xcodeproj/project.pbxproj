@@ -20,6 +20,7 @@
 		8771DB991EC5902E00347E90 /* point.png in Resources */ = {isa = PBXBuildFile; fileRef = 8771DB981EC5902E00347E90 /* point.png */; };
 		8771DB9B1EC591F000347E90 /* homeImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8771DB9A1EC591F000347E90 /* homeImage.png */; };
 		8771DB9D1EC593ED00347E90 /* cloud1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8771DB9C1EC593ED00347E90 /* cloud1.png */; };
+		87741AC51EC7503C008E2A7A /* StepDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87741AC41EC7503C008E2A7A /* StepDemoViewController.m */; };
 		879A8BE71EB8D22A000FB1FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 879A8BE61EB8D22A000FB1FD /* main.m */; };
 		879A8BEA1EB8D22A000FB1FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 879A8BE91EB8D22A000FB1FD /* AppDelegate.m */; };
 		879A8BF01EB8D22A000FB1FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 879A8BEE1EB8D22A000FB1FD /* Main.storyboard */; };
@@ -47,6 +48,8 @@
 		8771DB981EC5902E00347E90 /* point.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = point.png; sourceTree = "<group>"; };
 		8771DB9A1EC591F000347E90 /* homeImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeImage.png; sourceTree = "<group>"; };
 		8771DB9C1EC593ED00347E90 /* cloud1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloud1.png; sourceTree = "<group>"; };
+		87741AC31EC7503C008E2A7A /* StepDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StepDemoViewController.h; sourceTree = "<group>"; };
+		87741AC41EC7503C008E2A7A /* StepDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StepDemoViewController.m; sourceTree = "<group>"; };
 		879A8BE21EB8D22A000FB1FD /* PolygonGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PolygonGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		879A8BE61EB8D22A000FB1FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		879A8BE81EB8D22A000FB1FD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -124,6 +127,8 @@
 				871776EE1EBA1CAF0081F05E /* GameViewController.m */,
 				8771DB821EC3348100347E90 /* StepTableViewController.h */,
 				8771DB831EC3348100347E90 /* StepTableViewController.m */,
+				87741AC31EC7503C008E2A7A /* StepDemoViewController.h */,
+				87741AC41EC7503C008E2A7A /* StepDemoViewController.m */,
 				8771DB7D1EC3347400347E90 /* StepCell.h */,
 				8771DB7E1EC3347400347E90 /* StepCell.m */,
 				8771DB7F1EC3347400347E90 /* StepCell.xib */,
@@ -291,6 +296,7 @@
 				879A8BE71EB8D22A000FB1FD /* main.m in Sources */,
 				871776EC1EBA1C540081F05E /* HomeViewController.m in Sources */,
 				8771DB841EC3348100347E90 /* StepTableViewController.m in Sources */,
+				87741AC51EC7503C008E2A7A /* StepDemoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "IQKeyboardManager.h"
+#import "STPopup.h"
 
 @interface AppDelegate ()
 
@@ -18,6 +19,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    UIApplication *myApplication = [UIApplication sharedApplication];
+    // 不隐藏
+    [myApplication setStatusBarHidden:NO];
+    // 设置为白色
+    [myApplication setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    
     IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
     manager.enable = YES;
     manager.shouldResignOnTouchOutside = YES;
@@ -25,10 +32,11 @@
     manager.enableAutoToolbar = YES;
     manager.toolbarManageBehaviour = IQAutoToolbarByTag;
     
-
-    //    [IQKeyboardManager sharedManager].enable = YES;
-//    [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
-
+    [STPopupNavigationBar appearance].barTintColor = [UIColor colorWithRed:31.0/255.0 green:191.0/255.0 blue:181.0/255.0 alpha:1.0];
+    [STPopupNavigationBar appearance].tintColor = [UIColor whiteColor];
+    [STPopupNavigationBar appearance].barStyle = UIBarStyleDefault;
+    [STPopupNavigationBar appearance].titleTextAttributes = @{ NSFontAttributeName: [UIFont fontWithName:@"DFWaWaSC-W5" size:20], NSForegroundColorAttributeName: [UIColor whiteColor] };
+    
     return YES;
 }
 

@@ -11,6 +11,16 @@
 #import "IQKeyboardManager.h"
 #import "IQKeyboardReturnKeyHandler.h"
 
+/*
+ tag
+ 001: valueTextField
+ 002: operatorTextField
+ 003: confirmButton
+ 004: cannelButton
+ 005: createButton
+ 006: specifyButton
+ */
+
 @interface HomeViewController ()<UIPickerViewDelegate, UIPickerViewDataSource> {
     BOOL btnEnabled;
     BOOL valueEnabled;
@@ -18,6 +28,7 @@
     NSArray *vertexNumArray;
     NSString *vertexNumStr;
     CGFloat angle;
+    BOOL isFirstOpen;
 }
 
 
@@ -28,16 +39,6 @@
 @implementation HomeViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    for(NSString *fontfamilyname in [UIFont familyNames])
-    {
-        NSLog(@"family:'%@'",fontfamilyname);
-        for(NSString *fontName in [UIFont fontNamesForFamilyName:fontfamilyname])
-        {
-            NSLog(@"\tfont:'%@'",fontName);
-        }
-        NSLog(@"-------------");
-    }  
     
     IQKeyboardReturnKeyHandler *retuenKeyHandler = [[IQKeyboardReturnKeyHandler alloc]initWithViewController:self];
     retuenKeyHandler.lastTextFieldReturnKeyType =UIReturnKeyDone;
@@ -73,6 +74,7 @@
     createButton.layer.cornerRadius = 4;
     createButton.clipsToBounds = YES;
     createButton.enabled = NO;
+    createButton.tag = 005;
     [createButton addTarget:self action:@selector(createBtnClicked) forControlEvents:UIControlEventTouchUpInside];
     self.createButton = createButton;
     [self.view addSubview:createButton];
@@ -87,6 +89,7 @@
     specifyButton.layer.cornerRadius = 4;
     specifyButton.clipsToBounds = YES;
     specifyButton.enabled = NO;
+    specifyButton.tag = 006;
     [specifyButton addTarget:self action:@selector(SpecifyBtnClicked) forControlEvents:UIControlEventTouchUpInside];
     self.specifyButton = specifyButton;
     [self.view addSubview:specifyButton];
@@ -112,6 +115,7 @@
     point3.tag = 103;
     [self.view addSubview:point3];
     
+    isFirstOpen = YES;
     // 旋转地球
     UIImageView *earthImageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2, self.gameNameImageView.frame.origin.y - 20 - 150/2, 0.1, 0.1)];
     earthImageView.image = [UIImage imageNamed:@"homeImage"];
@@ -123,71 +127,77 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:YES];
     
-    
-    // 游戏名UIImageView
-    [UIView animateWithDuration:1 delay:0.5 usingSpringWithDamping:0.3 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.gameNameImageView.frame = CGRectMake(self.view.bounds.size.width / 2 - 210/2, self.vertexNumLabel.frame.origin.y - 20 - 50, 210, 50);
-
-    } completion:^(BOOL finished) {
-
-    }];
-    
-    // 三个点
-    UIImageView *point1 = (UIImageView *)[self.view viewWithTag:101];
-    UIImageView *point2 = (UIImageView *)[self.view viewWithTag:102];
-    UIImageView *point3 = (UIImageView *)[self.view viewWithTag:103];
-    [UIView animateWithDuration:0.7 delay:1.2 usingSpringWithDamping:0.4 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        point1.frame = CGRectMake(self.gameNameImageView.frame.origin.x + 40, self.gameNameImageView.frame.origin.y + 5, 10, 10);
-    } completion:^(BOOL finished) {
+    if (isFirstOpen) {
+        // 游戏名UIImageView
+        [UIView animateWithDuration:1 delay:0.5 usingSpringWithDamping:0.3 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.gameNameImageView.frame = CGRectMake(self.view.bounds.size.width / 2 - 210/2, self.vertexNumLabel.frame.origin.y - 20 - 50, 210, 50);
+            
+        } completion:^(BOOL finished) {
+            
+        }];
         
-    }];
-    [UIView animateWithDuration:0.7 delay:1 usingSpringWithDamping:0.4 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        point2.frame = CGRectMake(self.gameNameImageView.frame.origin.x + 140, self.gameNameImageView.frame.origin.y + 5, 10, 10);
-    } completion:^(BOOL finished) {
+        // 三个点
+        UIImageView *point1 = (UIImageView *)[self.view viewWithTag:101];
+        UIImageView *point2 = (UIImageView *)[self.view viewWithTag:102];
+        UIImageView *point3 = (UIImageView *)[self.view viewWithTag:103];
+        [UIView animateWithDuration:0.7 delay:1.3 usingSpringWithDamping:0.4 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            point1.frame = CGRectMake(self.gameNameImageView.frame.origin.x + 40, self.gameNameImageView.frame.origin.y + 5, 10, 10);
+        } completion:^(BOOL finished) {
+            
+        }];
+        [UIView animateWithDuration:0.7 delay:1 usingSpringWithDamping:0.4 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            point2.frame = CGRectMake(self.gameNameImageView.frame.origin.x + 140, self.gameNameImageView.frame.origin.y + 5, 10, 10);
+        } completion:^(BOOL finished) {
+            
+        }];
+        [UIView animateWithDuration:0.7 delay:1.1 usingSpringWithDamping:0.4 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            point3.frame = CGRectMake(self.gameNameImageView.frame.origin.x + 200, self.gameNameImageView.frame.origin.y + 5, 10, 10);
+        } completion:^(BOOL finished) {
+            
+        }];
         
-    }];
-    [UIView animateWithDuration:0.7 delay:1.1 usingSpringWithDamping:0.4 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        point3.frame = CGRectMake(self.gameNameImageView.frame.origin.x + 200, self.gameNameImageView.frame.origin.y + 5, 10, 10);
-    } completion:^(BOOL finished) {
-        
-    }];
-    
-    // 地球自转
-    [UIView animateWithDuration:0.5 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        // 地球自转
+        [UIView animateWithDuration:0.5 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.earthImageView.transform = CGAffineTransformMakeScale(1500, 1500);
-    } completion:^(BOOL finished) {
-        // 慢慢自转
-        [self spin];
-        UIImageView *cloudImageView1 = [[UIImageView alloc]initWithFrame:CGRectMake(-88, self.earthImageView.frame.origin.y, 88, 88)];
-        cloudImageView1.image = [UIImage imageNamed:@"cloud1"];
-        [self.view addSubview:cloudImageView1];
-        UIImageView *cloudImageView2 = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width + 100, self.earthImageView.frame.origin.y + 30, 100, 100)];
-        cloudImageView2.image = [UIImage imageNamed:@"cloud2"];
-        [self.view addSubview:cloudImageView2];
+        } completion:^(BOOL finished) {
+            // 慢慢自转
+            [self spin];
+            
+        }];
         
-        [UIView animateWithDuration:10 delay:0 options:UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionCurveLinear animations:^{
-            cloudImageView1.frame = CGRectMake(self.view.frame.size.width + 88, self.earthImageView.frame.origin.y, 88, 88);
-            cloudImageView2.frame = CGRectMake(-100, self.earthImageView.frame.origin.y + 30, 100, 100);
+        [UIView animateWithDuration:0.5 delay:0.6 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.vertexNumLabel.frame = CGRectMake(self.view.bounds.size.width/2 - 90, self.view.bounds.size.height/2 - 15, 80, 30);
         } completion:nil];
         
-    }];
+        [UIView animateWithDuration:0.5 delay:0.7 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.vertexNumPicker.frame = CGRectMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2 - 55 / 2, 60, 55);
+        } completion:nil];
+        
+        [UIView animateWithDuration:0.5 delay:0.8 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.createButton.frame = CGRectMake(self.view.bounds.size.width / 2 - 45, self.vertexNumPicker.frame.origin.y + self.vertexNumPicker.frame.size.height + 10, 90, 35);
+        } completion:nil];
+        
+        [UIView animateWithDuration:0.5 delay:0.9 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.specifyButton.frame = CGRectMake(self.view.bounds.size.width / 2 - 45, self.createButton.frame.origin.y + self.createButton.frame.size.height + 10, 90, 35);
+        } completion:nil];
+
+    }
     
-    [UIView animateWithDuration:0.5 delay:0.6 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-       self.vertexNumLabel.frame = CGRectMake(self.view.bounds.size.width/2 - 90, self.view.bounds.size.height/2 - 15, 80, 30);
-    } completion:nil];
+    isFirstOpen = NO;
     
-    [UIView animateWithDuration:0.5 delay:0.7 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-         self.vertexNumPicker.frame = CGRectMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2 - 55 / 2, 60, 55);
-    } completion:nil];
+    UIImageView *cloudImageView1 = [[UIImageView alloc]initWithFrame:CGRectMake(-88, self.earthImageView.frame.origin.y, 88, 88)];
+    cloudImageView1.image = [UIImage imageNamed:@"cloud1"];
+    [self.view addSubview:cloudImageView1];
+    UIImageView *cloudImageView2 = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width + 100, self.earthImageView.frame.origin.y + 30, 100, 100)];
+    cloudImageView2.image = [UIImage imageNamed:@"cloud2"];
+    [self.view addSubview:cloudImageView2];
     
-    [UIView animateWithDuration:0.5 delay:0.8 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.createButton.frame = CGRectMake(self.view.bounds.size.width / 2 - 45, self.vertexNumPicker.frame.origin.y + self.vertexNumPicker.frame.size.height + 10, 90, 35);
-    } completion:nil];
-    
-    [UIView animateWithDuration:0.5 delay:0.9 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.specifyButton.frame = CGRectMake(self.view.bounds.size.width / 2 - 45, self.createButton.frame.origin.y + self.createButton.frame.size.height + 10, 90, 35);
+    [UIView animateWithDuration:10 delay:0 options:UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionCurveLinear animations:^{
+        cloudImageView1.frame = CGRectMake(self.view.frame.size.width + 88, self.earthImageView.frame.origin.y, 88, 88);
+        cloudImageView2.frame = CGRectMake(-100, self.earthImageView.frame.origin.y + 30, 100, 100);
     } completion:nil];
 
+    
 }
 
 - (void)spin {
@@ -259,6 +269,16 @@
 #pragma mark - 按钮事件
 
 - (void)createBtnClicked {
+    
+    UIView *buttonView = (UIView *)[self.view viewWithTag:005];
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        buttonView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.1 animations:^{
+            buttonView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        } completion:nil];
+    }];
+
 
     GameViewController *gameVC = [self.storyboard instantiateViewControllerWithIdentifier:@"gameVC"];
     gameVC.vertexNumStr = vertexNumStr;
@@ -279,6 +299,16 @@
 }
 
 - (void)SpecifyBtnClicked {
+    
+    UIView *buttonView = (UIView *)[self.view viewWithTag:006];
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        buttonView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.1 animations:^{
+            buttonView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        } completion:nil];
+    }];
+
     self.createButton.enabled = NO;
     self.specifyButton.enabled = NO;
     self.vertexNumPicker.userInteractionEnabled = NO;
@@ -364,6 +394,15 @@
 
 // 确认按钮
 - (void)confirmBtnClicked {
+    UIView *buttonView = (UIView *)[self.view viewWithTag:003];
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        buttonView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.1 animations:^{
+            buttonView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        } completion:nil];
+    }];
+
     UITextField *valueTextField = (UITextField *)[self.view viewWithTag:001];
     UITextField *operatorTextField = (UITextField *)[self.view viewWithTag:002];
 
@@ -394,6 +433,15 @@
 
 // 取消按钮
 - (void)cannelBtnClicked {
+    UIView *buttonView = (UIView *)[self.view viewWithTag:004];
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        buttonView.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.1 animations:^{
+            buttonView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        } completion:nil];
+    }];
+
     [self removeTextField];
 }
 
