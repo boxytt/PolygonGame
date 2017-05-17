@@ -25,5 +25,6 @@
 - (IBAction)historyBtnClicked:(UIButton *)sender;
 @property (weak, nonatomic) IBOutlet UIButton *highestButton;
 - (IBAction)highestBtnClicked:(UIButton *)sender;
+@property (weak, nonatomic) IBOutlet UILabel *highestLabel;
 
 @end

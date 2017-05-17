@@ -159,8 +159,8 @@
                                             <action selector="highestBtnClicked:" destination="kfo-eG-sAO" eventType="touchUpInside" id="4VU-d5-2BS"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="n" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a5R-mt-EaX">
-                                        <rect key="frame" x="44.5" y="27" width="11" height="28"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="n" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="a5R-mt-EaX">
+                                        <rect key="frame" x="10" y="27" width="80" height="28"/>
                                         <fontDescription key="fontDescription" name="DFWaWaSC-W5" family="Wawati SC" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -173,6 +173,8 @@
                                     <constraint firstItem="mbp-9s-28H" firstAttribute="leading" secondItem="pjv-Zj-7jB" secondAttribute="leading" id="Hgh-sh-Zgc"/>
                                     <constraint firstItem="mbp-9s-28H" firstAttribute="top" secondItem="pjv-Zj-7jB" secondAttribute="top" id="LkG-iG-g8w"/>
                                     <constraint firstAttribute="bottom" secondItem="a5R-mt-EaX" secondAttribute="bottom" constant="5" id="brJ-Zw-KqW"/>
+                                    <constraint firstAttribute="trailing" secondItem="a5R-mt-EaX" secondAttribute="trailing" constant="10" id="cL1-9J-cbX"/>
+                                    <constraint firstItem="a5R-mt-EaX" firstAttribute="leading" secondItem="pjv-Zj-7jB" secondAttribute="leading" constant="10" id="ipz-al-oVf"/>
                                     <constraint firstItem="a5R-mt-EaX" firstAttribute="centerX" secondItem="pjv-Zj-7jB" secondAttribute="centerX" id="itu-QK-veN"/>
                                     <constraint firstAttribute="width" constant="100" id="ouA-4W-kiW"/>
                                     <constraint firstItem="mbp-9s-28H" firstAttribute="centerX" secondItem="pjv-Zj-7jB" secondAttribute="centerX" id="z9I-h2-8ZK"/>
@@ -187,8 +189,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hUZ-0s-8k7">
                                 <rect key="frame" x="57.5" y="56" width="100" height="60"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="n" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wYF-RQ-BsY">
-                                        <rect key="frame" x="45" y="27" width="11" height="28"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="n" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="wYF-RQ-BsY">
+                                        <rect key="frame" x="10" y="27" width="80" height="28"/>
                                         <fontDescription key="fontDescription" name="DFWaWaSC-W5" family="Wawati SC" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -204,6 +206,8 @@
                                 <constraints>
                                     <constraint firstItem="cSR-Um-qOh" firstAttribute="centerX" secondItem="hUZ-0s-8k7" secondAttribute="centerX" id="4nx-kL-4hx"/>
                                     <constraint firstItem="wYF-RQ-BsY" firstAttribute="centerX" secondItem="hUZ-0s-8k7" secondAttribute="centerX" id="8fU-UW-BRP"/>
+                                    <constraint firstAttribute="trailing" secondItem="wYF-RQ-BsY" secondAttribute="trailing" constant="10" id="8yc-X6-e1s"/>
+                                    <constraint firstItem="wYF-RQ-BsY" firstAttribute="leading" secondItem="hUZ-0s-8k7" secondAttribute="leading" constant="10" id="Ca0-pD-L2d"/>
                                     <constraint firstAttribute="height" constant="60" id="Dza-WY-ex7"/>
                                     <constraint firstAttribute="width" constant="100" id="SFe-20-eeY"/>
                                     <constraint firstAttribute="bottom" secondItem="wYF-RQ-BsY" secondAttribute="bottom" constant="5" id="VQE-iz-lLp"/>
@@ -238,6 +242,7 @@
                         <outlet property="againButton" destination="6Qj-DL-1Lz" id="w6g-R4-OMi"/>
                         <outlet property="contentView" destination="fBw-dW-QFH" id="wpz-qq-QlL"/>
                         <outlet property="highestButton" destination="mbp-9s-28H" id="UPH-4y-ur7"/>
+                        <outlet property="highestLabel" destination="a5R-mt-EaX" id="ojp-a3-LOm"/>
                         <outlet property="highestScoreButton" destination="mbp-9s-28H" id="xoG-Lg-tFW"/>
                         <outlet property="historyButton" destination="uO4-OI-gHk" id="Ehj-nh-jQn"/>
                         <outlet property="revokeButton" destination="k1m-kn-Htx" id="oFl-JG-8ev"/>

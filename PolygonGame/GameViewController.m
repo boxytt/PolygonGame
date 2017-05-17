@@ -13,6 +13,7 @@
 #define pi 3.14159265358979323846
 #define radiansToDegrees(x) (180.0 * x / pi)
 
+#define NMAX 100
 /* tag的值：
     顶点：101～ 
     线：201～
@@ -36,6 +37,7 @@ typedef struct {
     NSMutableArray *allValues; // 顶点数值和操作符
     NSMutableArray *historyArray; // 存放历史删除步骤DeleteStep
     NSArray *highestArray; // 存放最高分步骤
+    NSInteger highestScore; // 最高分
     BOOL isFirstLoad;
     BOOL isFirstStep;
     BOOL isEnd;
@@ -44,7 +46,20 @@ typedef struct {
     NSInteger firstStepRmEdge;
     CGFloat radiusOfCanvas;
     CGFloat radiusOfCircle;
+    
+    // 动态规划
+
+    NSInteger N;
+    int m[NMAX+1][NMAX+1][2];	  //m[i][j][0]表示从v[i]节点开始，边长为j的链的最小值
+                                  //m[i][j][1]表示从v[i]节点开始，边长为j的链的最大值
+    int v[NMAX+1];
+    char op[NMAX+1],maxs,mins;
+    char p[NMAX+1][NMAX+1][2];  //这个用String记录顺序的边
+    int minf, maxf;
+
 }
+
+
 
 @end
 
@@ -53,7 +68,6 @@ typedef struct {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     // 初始化
     vertexNum = [self.vertexNumStr intValue];
     isFirstLoad = YES;
@@ -99,10 +113,11 @@ typedef struct {
     
     // 创建allValues数组
     for (int i = 0; i < vertexNum; i++) {
-        [allValues addObject: [vertexValues objectAtIndex:i]];
         [allValues addObject: [operatorValues objectAtIndex:i]];
+        [allValues addObject: [vertexValues objectAtIndex:i]];
     }
     
+    NSLog(@"all: %@", allValues);
     // 让分数label显示为当前最高分的点
     startScore = [vertexValues[0] integerValue];
     for (int i = 0; i < vertexNum; i++) {
@@ -113,14 +128,39 @@ typedef struct {
     self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)startScore];
     
     // 动态规划计算最高分
-    highestArray = [[NSArray alloc]initWithObjects:@"1", @"2", @"3", @"4", @"5", nil];
+    minf = 0;
+    maxf = 0;
+    N = vertexNum;
+    for (int i = 1; i <= N; i++) {
+        NSLog(@"#0");
+        v[i] = [vertexValues[i-1] intValue];
+//        op[i] = [operatorValues[i-1] charValue];
+        op[i] = ([operatorValues[i-1] isEqualToString:@"+"]) ? '+' : '*';
+    }
+    for(int i=1; i<=N; i++){
+        printf("v[%d]=%d, op[%d]=%c\n", i, v[i], i, op[i]);
+        m[i][1][0]=v[i];
+        m[i][1][1]=v[i];
+    }
+    
+    // 设置最高分
+    highestScore = [self PloyMax];
+    self.highestLabel.text = [NSString stringWithFormat:@"%ld", (long)highestScore];
+    
+    
+    
+//    highestArray = [[NSArray alloc]initWithObjects:@"1", @"2", @"3", @"4", @"5", nil];
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:YES];
     // 绘图
     if (isFirstLoad) {
         [self drawPolygon];
         isFirstLoad = NO;
+        
+        // 设置最高分
     }
 }
 
@@ -153,7 +193,6 @@ typedef struct {
     for (int i = 0; i < vertexNum; i++) {
         // 顶点的位置
         CGPoint point = CGPointMake(self.contentView.center.x + radiusOfCanvas * cos(2 * M_PI * (i+1) / vertexNum), self.contentView.frame.size.height / 2 + radiusOfCanvas * sin(2 * M_PI * (i+1) / vertexNum));
-        NSLog(@"point: %f, %f", self.contentView.center.x, self.contentView.center.y);
         // 保存顶点
         [vertexPosition addObject:NSStringFromCGPoint(point)];
         
@@ -164,7 +203,13 @@ typedef struct {
         [vertexButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         vertexButton.titleLabel.font = [UIFont fontWithName:@"DFWaWaSC-W5" size:18];
         vertexButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-        [vertexButton setBackgroundImage:[UIImage imageNamed:@"圈"] forState:UIControlStateNormal];
+//        [vertexButton setBackgroundImage:[UIImage imageNamed:@"圈"] forState:UIControlStateNormal];
+        //设置边框颜色
+        vertexButton.layer.borderColor = [[UIColor colorWithRed:31.0/255.0 green:191.0/255.0 blue:181.0/255.0 alpha:1] CGColor];
+        //设置边框宽度
+        vertexButton.layer.borderWidth = 3.0f;
+        //给按钮设置角的弧度
+        vertexButton.layer.cornerRadius = radiusOfCircle;
         
         vertexButton.userInteractionEnabled = NO;
         [self.contentView addSubview:vertexButton];
@@ -180,10 +225,10 @@ typedef struct {
     // 画线和序号和操作符
     for (int i = 0; i < vertexNum; i++) {
         
-        NSInteger j = (i != vertexNum-1 ? i + 1 : 0);
+        NSInteger j = (i != 0 ? i - 1 : vertexNum-1);
         // 画连线
-        float rads = [self angleForStartPoint:CGPointFromString(vertexPosition[i]) EndPoint:CGPointFromString(vertexPosition[j])];
-        float distance = [self distanceBetweenPiontA:CGPointFromString(vertexPosition[i]) andPointB:CGPointFromString(vertexPosition[j])] - 2 * radiusOfCircle;
+        float rads = [self angleForStartPoint:CGPointFromString(vertexPosition[j]) EndPoint:CGPointFromString(vertexPosition[i])];
+        float distance = [self distanceBetweenPiontA:CGPointFromString(vertexPosition[j]) andPointB:CGPointFromString(vertexPosition[i])] - 2 * radiusOfCircle;
         UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, distance, 5)];
         button.tag = 201 + i;
         [button addTarget:self action:@selector(edgeTouchDown:) forControlEvents:UIControlEventTouchDown];
@@ -200,7 +245,6 @@ typedef struct {
         // 计算序号和操作符的位置
         CGPoint canvasCenter = CGPointMake(self.contentView.center.x, self.contentView.frame.size.height / 2);
         CGPoint buttonCenter = button.center;
-        NSLog(@"line: %f,%f", canvasCenter.x, canvasCenter.y);
 
         float d = [self distanceBetweenPiontA:canvasCenter andPointB:buttonCenter];
         float r = [self angleForStartPoint:canvasCenter EndPoint:buttonCenter];
@@ -299,22 +343,23 @@ typedef struct {
 
 // 按下后在里面抬起，删除
 - (void)edgeTouchUpInside:(UIButton *)button {
-    NSLog(@"touchUpinside1");
+    
     NSInteger tag = button.tag;
+    NSLog(@"edgeNum:: %ld", (long)tag);
     UILabel *numLabel = (UILabel *)[self.contentView viewWithTag:tag+100];
     UILabel *operatorLabel = (UILabel *)[self.contentView viewWithTag:tag+200];
     
-    NSInteger index = (tag - 200) * 2 -1;
-    
+    NSInteger index = (tag - 200) * 2 -2;
+    NSLog(@"edgeIndex: %ld", (long)index);
     if (isFirstStep) {
         // 第1步，删除掉一条边
         // 将要删除的边加入到historyArrary数组中
         DeleteStep delete;
         delete.deletedEdgeNum = tag-200;
-        delete.priorVertexNum = tag-200;
-        delete.priorVertexValue = [[vertexValues objectAtIndex:tag-200-1] intValue];
-        delete.nextVertexNum = (tag-200 == vertexNum) ? 1 : tag-200+1;
-        delete.nextVertexValue = [[vertexValues objectAtIndex:((tag-200 == vertexNum) ? 1 : tag-200+1)-1] intValue];
+        delete.priorVertexNum = (tag-200 == 1) ? vertexNum :tag-200-1;
+        delete.priorVertexValue = [[vertexValues objectAtIndex:delete.priorVertexNum-1] intValue];
+        delete.nextVertexNum = tag-200;
+        delete.nextVertexValue = [[vertexValues objectAtIndex:delete.nextVertexNum-1] intValue];
         //将结构体封装成value对象
         NSValue *value = [NSValue valueWithBytes:&delete objCType:@encode(DeleteStep)];
         [historyArray addObject:value];
@@ -347,28 +392,27 @@ typedef struct {
     } else {
         // 随后的n-1步
         // 获取 两个数值和一个操作符
-       NSInteger ix = index;
-       NSInteger jx = (ix == 0) ? allValues.count-1 : index-1; // 前数
-       NSInteger kx = (ix == allValues.count - 1) ? 0 : index+1; // 后数
-        
+        NSInteger ix = index;    // 操作符在allValues中的下标
+        NSInteger jx = (ix == 0) ? allValues.count-1 : index-1; // 前面数
+        NSInteger kx = index+1; // 后数
+        NSLog(@"前:%ld, 边:%ld, 后:%ld", (long)jx, (long)ix, (long)kx);
         while ([allValues objectAtIndex:jx] == [NSNull null]) {
-            if (jx == 0) {
-                jx = allValues.count - 2;
+            if (jx == 1) {
+                jx = allValues.count - 1;
+
             } else {
                 jx -= 2;
             }
-
         }
         
         while ([allValues objectAtIndex:kx] == [NSNull null]) {
-            if (kx == allValues.count - 2) {
-                kx = 0;
+            if (kx == allValues.count - 1) {
+                kx = 1;
             } else {
                 kx += 2;
             }
-
         }
-        
+
         NSString *op = [allValues objectAtIndex:ix];
         NSInteger priorValue = [[allValues objectAtIndex:jx] integerValue];
         NSInteger nextValue = [[allValues objectAtIndex:kx] integerValue];
@@ -385,15 +429,17 @@ typedef struct {
         delete.nextVertexValue = nextValue;
         NSValue *value = [NSValue valueWithBytes:&delete objCType:@encode(DeleteStep)];
         [historyArray addObject:value];
-        
+        NSLog(@"#2");
+
         // 计算
         if ([op isEqualToString:@"+"]) {
             result = priorValue + nextValue;
         } else if ([op isEqualToString:@"*"]) {
             result = priorValue * nextValue;
         }
-        NSLog(@"result: %ld", (long)result);
         
+        NSLog(@"#3");
+
         // 将结果赋给前一个点
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
             priorVertexButton.transform = CGAffineTransformMakeScale(1.3, 1.3);
@@ -410,7 +456,7 @@ typedef struct {
         [allValues replaceObjectAtIndex:ix withObject:[NSNull null]];
         [allValues replaceObjectAtIndex:kx withObject:[NSNull null]];
         
-        // 移除后点和边
+        // 删除后点和边
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             nextVertexButton.transform = CGAffineTransformMakeScale(0.1, 0.1);
             button.transform = CGAffineTransformMakeScale(0.1, 0.1);
@@ -433,9 +479,9 @@ typedef struct {
         
         
         // 判断是否结束
-       NSInteger nullCount = 0;
-       NSInteger score = 0;
-        for (int i = 1; i < allValues.count; i+=2) {
+        NSInteger nullCount = 0;
+        NSInteger score = 0;
+        for (int i = 0; i < allValues.count; i+=2) {
             if ([allValues objectAtIndex:i] == [NSNull null]) {
                 nullCount++;
             }
@@ -445,16 +491,16 @@ typedef struct {
         if (nullCount == operatorValues.count) {
             NSLog(@"结束");
             isEnd = YES;
-            for (int i = 0; i < allValues.count; i+=2) {
+            for (int i = 1; i < allValues.count; i+=2) {
                 if ([allValues objectAtIndex:i] != [NSNull null]) {
                     score = [[allValues objectAtIndex:i] intValue];
                 }
             }
             
-           NSInteger theOnlyVertexNum = 0;
-            for (int i = 0; i < allValues.count; i+=2) {
+            NSInteger theOnlyVertexNum = 0;
+            for (int i = 1; i < allValues.count; i+=2) {
                 if ([allValues objectAtIndex:i] != [NSNull null]) {
-                    theOnlyVertexNum = (i+1)/2 + 1;
+                    theOnlyVertexNum = (i + 1) / 2;
                 }
             }
             
@@ -473,43 +519,50 @@ typedef struct {
                 [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.3 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                     self.yourScoreLabel.textColor = [UIColor whiteColor];
                     self.yourScoreLabel.frame = original;
+
                     vertexButton.center = CGPointMake(self.contentView.frame.size.width/2, self.contentView.frame.size.height/2);
-                    vertexButton.transform = CGAffineTransformMakeScale(1.3, 1.3);
-                } completion:^(BOOL finished) {
-                                   }];
+                    vertexButton.transform = CGAffineTransformMakeScale(2, 2);
+                    
+
+                } completion:nil];
+            }];
+            
+            
+            
+            [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+            } completion:^(BOOL finished) {
+                
             }];
             
         } else {
             // 没结束
             // 移动边
-           NSInteger moveEdgeNum;
-           NSInteger theOtherVertexNum;
+            NSInteger moveEdgeNum;
+            NSInteger theOtherVertexNum;
             BOOL needMove = YES;
-           NSInteger nextEdge = (ix == allValues.count - 1) ? 1 : ix+2;
-            NSLog(@"%ld", nextEdge);
+            NSInteger nextEdge = (ix == allValues.count - 2) ? 0 : ix+2;
+            NSLog(@"nextEdgeIndex: %ld", nextEdge);
             if (nextEdge == firstStepRmEdge) {
                 needMove = NO;
                 NSLog(@"不用移动");
             }
             while ([allValues objectAtIndex:nextEdge] == [NSNull null] && nextEdge != firstStepRmEdge && needMove) {
-                nextEdge = (nextEdge == allValues.count - 1) ? 1 : nextEdge+2;
+                nextEdge = (nextEdge == allValues.count - 2) ? 0 : nextEdge+2;
                 NSLog(@"%ld", nextEdge);
                 if (nextEdge == firstStepRmEdge) {
                     needMove = NO;
                     NSLog(@"不用移动");
                 }
             }
-            
-            
-            
+        
             if (needMove) {
-                moveEdgeNum = (nextEdge + 1) / 2; // 第moveEdgeNum条
+                moveEdgeNum = (nextEdge / 2) + 1; // 第moveEdgeNum条
                 NSInteger theVertexNum = jx / 2 + 1;  // 第theVertexNum个顶点
-                theOtherVertexNum = (moveEdgeNum+1 > vertexValues.count) ? ((moveEdgeNum+1) - vertexValues.count) :moveEdgeNum+1; // 第theOtherVertexNum个顶点
+                theOtherVertexNum = moveEdgeNum; // 第theOtherVertexNum个顶点
                 NSLog(@"要移动的边: %ld", moveEdgeNum);
                 NSLog(@"第%ld个顶点, 第%ld个顶点", theVertexNum, theOtherVertexNum);
 
-                
                 // 移动边moveEdge
                 UIButton *moveEdge = (UIButton *)[self.view viewWithTag:200+moveEdgeNum];
                 // 先移去
@@ -629,7 +682,7 @@ typedef struct {
     
     // 更新分数label
     NSMutableArray *notNullArray = [[NSMutableArray alloc]init];
-    for (int i = 0; i < vertexNum * 2; i += 2) {
+    for (int i = 1; i < vertexNum * 2; i += 2) {
         if (allValues[i] != [NSNull null]) {
             [notNullArray addObject:allValues[i]];
         }
@@ -660,6 +713,8 @@ typedef struct {
             }];
         }];
     }
+    
+    NSLog(@"all: %@", allValues);
 }
 
 #pragma mark - 按钮事件
@@ -705,8 +760,8 @@ typedef struct {
     // 重新创建allValues数组
     [allValues removeAllObjects];
     for (int i = 0; i < vertexNum; i++) {
-        [allValues addObject: [vertexValues objectAtIndex:i]];
         [allValues addObject: [operatorValues objectAtIndex:i]];
+        [allValues addObject: [vertexValues objectAtIndex:i]];
     }
     NSLog(@"all: %@", allValues);
     
@@ -758,15 +813,25 @@ typedef struct {
     NSInteger nextVertexNum = s.nextVertexNum;
     NSInteger nextVertexValue = s.nextVertexValue;
     NSInteger deletedEdgeNum = s.deletedEdgeNum;
+    
     NSInteger moveEdgeNum; //要移动的边
     NSInteger theVertexNum; // 要移动的边的上一个点
     NSInteger theOtherVertexNum;    //要移动的边的下一个点
     
     [historyArray removeLastObject];
     // 重新给allValues赋值
-    [allValues replaceObjectAtIndex: (priorVertexNum-1)*2 withObject:[NSNumber numberWithInteger:priorVertexValue]];
-    [allValues replaceObjectAtIndex: (nextVertexNum-1)*2  withObject:[NSNumber numberWithInteger:nextVertexValue]];
-    [allValues replaceObjectAtIndex: (deletedEdgeNum * 2 - 1) withObject: [operatorValues objectAtIndex:deletedEdgeNum-1]];
+    NSLog(@"priorVerNum:%ld", (long)priorVertexNum);
+    NSLog(@"deleteEdgeNum:%ld", (long)deletedEdgeNum);
+    NSLog(@"nextVerNum:%ld", (long)nextVertexNum);
+    NSLog(@"\n");
+    NSLog(@"priorVerIndex:%ld", (long)priorVertexNum*2-1);
+    NSLog(@"deleteEdgeIndex:%ld", (long)deletedEdgeNum*2-2);
+    NSLog(@"nextVerIndex:%ld", (long)nextVertexNum*2-1);
+
+
+    [allValues replaceObjectAtIndex: (priorVertexNum*2-1) withObject:[NSNumber numberWithInteger:priorVertexValue]];
+    [allValues replaceObjectAtIndex: (nextVertexNum*2-1) withObject:[NSNumber numberWithInteger:nextVertexValue]];
+    [allValues replaceObjectAtIndex: (deletedEdgeNum*2-2) withObject: [operatorValues objectAtIndex:deletedEdgeNum-1]];
 
     float rads = [self angleForStartPoint:CGPointFromString(vertexPosition[s.priorVertexNum-1]) EndPoint:CGPointFromString(vertexPosition[s.nextVertexNum-1])];
     float distance = [self distanceBetweenPiontA:CGPointFromString(vertexPosition[s.priorVertexNum-1]) andPointB:CGPointFromString(vertexPosition[s.nextVertexNum-1])] - 2 * radiusOfCircle;
@@ -775,14 +840,14 @@ typedef struct {
         // 判断是否后点连着的边要移动
         // 移动的边
         BOOL needMove = YES;
-        NSInteger nextEdge = (deletedEdgeNum*2-1 == allValues.count - 1) ? 1 : deletedEdgeNum*2-1 + 2;
-        NSLog(@"%ld", nextEdge);
+        NSInteger nextEdge = (deletedEdgeNum * 2 == allValues.count) ? 0 : deletedEdgeNum * 2;
+        NSLog(@"nextEdgeIndex:%ld", nextEdge);
         if (nextEdge == firstStepRmEdge) {
             needMove = NO;
             NSLog(@"不用移动");
         }
         while ([allValues objectAtIndex:nextEdge] == [NSNull null] && nextEdge != firstStepRmEdge && needMove) {
-            nextEdge = (nextEdge == allValues.count - 1) ? 1 : nextEdge+2;
+            nextEdge = (nextEdge == allValues.count - 2) ? 0 : nextEdge+2;
             NSLog(@"%ld", nextEdge);
             if (nextEdge == firstStepRmEdge) {
                 needMove = NO;
@@ -791,9 +856,9 @@ typedef struct {
         }
         
         if (needMove) {
-            moveEdgeNum = (nextEdge + 1) / 2; // 第moveEdgeNum条
+            moveEdgeNum = (nextEdge + 2) / 2; // 第moveEdgeNum条
             theVertexNum = nextVertexNum;  // 第theVertexNum个顶点
-            theOtherVertexNum = (moveEdgeNum+1 > vertexValues.count) ? ((moveEdgeNum+1) - vertexValues.count) :moveEdgeNum+1; // 第theOtherVertexNum个顶点
+            theOtherVertexNum = moveEdgeNum; // 第theOtherVertexNum个顶点
             NSLog(@"要移动的边: %ld", moveEdgeNum);
             NSLog(@"第%ld个顶点, 第%ld个顶点", theVertexNum, theOtherVertexNum);
             
@@ -921,7 +986,15 @@ typedef struct {
         [nextVertexButton setTitle:[NSString stringWithFormat:@"%ld", (long)nextVertexValue] forState:UIControlStateNormal];
         [nextVertexButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         nextVertexButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-        [nextVertexButton setBackgroundImage:[UIImage imageNamed:@"圈"] forState:UIControlStateNormal];
+//        [nextVertexButton setBackgroundImage:[UIImage imageNamed:@"圈"] forState:UIControlStateNormal];
+        nextVertexButton.layer.borderColor = [[UIColor colorWithRed:31.0/255.0 green:191.0/255.0 blue:181.0/255.0 alpha:1] CGColor];
+        //设置边框颜色
+        nextVertexButton.layer.borderColor = [[UIColor colorWithRed:31.0/255.0 green:191.0/255.0 blue:181.0/255.0 alpha:1] CGColor];
+        //设置边框宽度
+        nextVertexButton.layer.borderWidth = 3.0f;
+        //给按钮设置角的弧度
+        nextVertexButton.layer.cornerRadius = radiusOfCircle;
+    
         nextVertexButton.userInteractionEnabled = NO;
         [self.contentView addSubview:nextVertexButton];
         
@@ -1045,7 +1118,7 @@ typedef struct {
     [array addObject:vertexValues];
     [array addObject:operatorValues];
     [array addObject:highestArray];
-//    [array addObject:vertexPosition];
+
     
     //通过通知中心发送通知
     [[NSNotificationCenter defaultCenter] postNotificationName:@"toStepDemo" object:array];
@@ -1080,6 +1153,111 @@ typedef struct {
         }];
     }
 }
+
+#pragma mark - 动态规划求最高分
+
+- (void) MinMaxWithi:(int)i ands:(int)s andj:(int) j
+//minMax(i,s,j)这个方法，就代表:i开头的j长度的链子,取消的是i+s这个点，
+//如果这个链真的是用这个断点时是最佳答案，就在他们子链记录顺序上加上，i+s这条边
+{
+    int e[5];
+    int a=m[i][s][0],b=m[i][s][1]; //a,b分别为第一条子链的最小值和最大值
+    int r=(i+s-1)%N+1;//多边形的实际顶点编号
+    int c=m[r][j-s][0],d=m[r][j-s][1];//c，d分别为第二条子链的最小值和最大值
+    
+    if(op[r]=='+')
+    {
+        minf=a+c;
+        maxf=b+d;
+        mins=(p[i][s][0]+p[r][j-s][0]+r+",");
+        maxs=(p[i][s][1]+p[r][j-s][1]+r+",");
+    }//计算最后一步op为+时的最小，最大值
+    if(op[r] == '*')
+    {
+        e[1]=a*c;
+        e[2]=a*d;
+        e[3]=b*c;
+        e[4]=d*b;
+        minf=e[1];
+        maxf=e[1];
+        mins=p[i][s][0]+p[r][j-s][0]+r;
+        maxs=p[i][s][0]+p[r][j-s][0]+r;
+        
+        for(int r=2;r<5;r++)
+        {
+            if(minf>e[r])
+            {
+                minf=e[r];
+                if(r == 2)
+                    mins = p[i][s][0] +p[r][j-s][1] + r ;
+                if(r == 3)
+                    mins = p[i][s][1] + p[r][j-s][0] + r ;
+                if(r == 4)
+                    mins = p[i][s][1] + p[r][j-s][1] + r ;}
+            if(maxf<e[r])
+            {
+                maxf=e[r];
+                if(r == 2)
+                    maxs = p[i][s][0] +p[r][j-s][1] + r ;
+                if(r == 3)
+                    maxs = p[i][s][1] + p[r][j-s][0] + r ;
+                if(r == 4)
+                    maxs = p[i][s][1] + p[r][j-s][1] + r ;
+            }
+        }
+    }//计算最后一步op为+时的最小，最大值
+    
+}//end MinMax()
+
+- (int)PloyMax {
+    NSInteger n = N;
+    for(int j=2;j<=n;j++) //j是迭代链的长度
+    {
+        for(int i=1;i<=n;i++)//迭代首次删掉第i条边，生成迭代链
+        {
+            [self MinMaxWithi:i ands:1 andj:j];
+            m[i][j][0] = minf;
+            m[i][j][1] = maxf;
+            p[i][j][0] = mins;
+            p[i][j][1] = maxs;
+            for(int s=1 ;s<j;s++) //s是迭代最后合并的位置，根据op进行+或*
+            {
+                [self MinMaxWithi:i ands:s andj:j];
+                if(m[i][j][0]>minf)
+                {
+                    m[i][j][0]=minf;
+                    p[i][j][0]=mins;
+                }
+                
+                if(m[i][j][1]<maxf)
+                {
+                    m[i][j][1]=maxf;
+                    p[i][j][1]=maxs;
+                }
+            }
+        }
+    }
+    
+    int temp = m[1][n][1];
+    int b = 1;//计算最大值首次删除的边p
+    
+    for (int i = 2 ; i <= n; i++)//迭代出最大边
+    {
+        if (temp < m[i][n][1]) {
+            temp = m[i][n][1];
+            b = i;
+        }
+    }
+    printf("多边形游戏首次删除第%d条边\n", b);			//打印最大值首次删除的边
+    printf("删除首边后的删边顺序为：\n");
+    NSLog(@"%c", p[b][1][1]);
+    for(int i = 1; i < n; i++) {
+        NSLog(@"##c");
+        NSLog(@"%c ", p[b][i][1]);
+    }
+    
+    return temp;
+}//end PolyMax()
 
 
 - (void)didReceiveMemoryWarning {
