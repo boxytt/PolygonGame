@@ -74,7 +74,6 @@ typedef struct {
     isFirstStep = YES;
     isEnd = NO;
     
- 
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -83,18 +82,29 @@ typedef struct {
 
 }
 
+-(void)viewDidDisappear:(BOOL)animated {
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
 - (void)getStep: (NSNotification *)notification {
 
     NSArray *array = notification.object;
     vertexValues = array[0];
     operatorValues = array[1];
     highestStepArray = array[2];
+    NSLog(@"after:%@", vertexValues);
+    
     vertexNum = highestStepArray.count;
+
+    NSLog(@"after:%@", highestStepArray);
+    NSLog(@"num:%ld", (long)vertexNum);
+
 
     // 创建allValues数组
     allValues = [[NSMutableArray alloc]init];
     for (int i = 0; i < vertexNum; i++) {
-        NSLog(@"#1");
+
         [allValues addObject: [operatorValues objectAtIndex:i]];
         [allValues addObject: [vertexValues objectAtIndex:i]];
     }

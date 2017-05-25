@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		871776EC1EBA1C540081F05E /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 871776EB1EBA1C540081F05E /* HomeViewController.m */; };
 		871776EF1EBA1CAF0081F05E /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 871776EE1EBA1CAF0081F05E /* GameViewController.m */; };
+		874607D81ED6AD4600E9D845 /* BestChoice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 874607D71ED6AD4600E9D845 /* BestChoice.mm */; };
 		874CB75F1EC5B246007FDD03 /* Wawati SC.otf in Resources */ = {isa = PBXBuildFile; fileRef = 874CB75D1EC5B1FE007FDD03 /* Wawati SC.otf */; };
 		874CB7611EC5D99F007FDD03 /* cloud2.png in Resources */ = {isa = PBXBuildFile; fileRef = 874CB7601EC5D99F007FDD03 /* cloud2.png */; };
 		874CB76B1EC5E0BB007FDD03 /* textField.png in Resources */ = {isa = PBXBuildFile; fileRef = 874CB76A1EC5E0BB007FDD03 /* textField.png */; };
@@ -35,6 +36,8 @@
 		871776EB1EBA1C540081F05E /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		871776ED1EBA1CAF0081F05E /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		871776EE1EBA1CAF0081F05E /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		874607D61ED6AD4600E9D845 /* BestChoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BestChoice.h; sourceTree = "<group>"; };
+		874607D71ED6AD4600E9D845 /* BestChoice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BestChoice.mm; sourceTree = "<group>"; };
 		874CB75D1EC5B1FE007FDD03 /* Wawati SC.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Wawati SC.otf"; sourceTree = "<group>"; };
 		874CB7601EC5D99F007FDD03 /* cloud2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloud2.png; sourceTree = "<group>"; };
 		874CB76A1EC5E0BB007FDD03 /* textField.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = textField.png; sourceTree = "<group>"; };
@@ -138,6 +141,8 @@
 				879A8BF31EB8D22A000FB1FD /* LaunchScreen.storyboard */,
 				879A8BF61EB8D22A000FB1FD /* Info.plist */,
 				879A8BE51EB8D22A000FB1FD /* Supporting Files */,
+				874607D61ED6AD4600E9D845 /* BestChoice.h */,
+				874607D71ED6AD4600E9D845 /* BestChoice.mm */,
 			);
 			path = PolygonGame;
 			sourceTree = "<group>";
@@ -290,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				874607D81ED6AD4600E9D845 /* BestChoice.mm in Sources */,
 				871776EF1EBA1CAF0081F05E /* GameViewController.m in Sources */,
 				879A8BEA1EB8D22A000FB1FD /* AppDelegate.m in Sources */,
 				8771DB801EC3347400347E90 /* StepCell.m in Sources */,

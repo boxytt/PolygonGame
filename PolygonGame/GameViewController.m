@@ -12,7 +12,7 @@
 #import "StepDemoViewController.h"
 #define pi 3.14159265358979323846
 #define radiansToDegrees(x) (180.0 * x / pi)
-
+#import "BestChoice.h"
 #define NMAX 100
 /* tag的值：
     顶点：101～ 
@@ -36,7 +36,7 @@ typedef struct {
     NSMutableArray *vertexPosition; // 顶点位置
     NSMutableArray *allValues; // 顶点数值和操作符
     NSMutableArray *historyArray; // 存放历史删除步骤DeleteStep
-    NSArray *highestArray; // 存放最高分步骤
+    NSMutableArray *highestArray; // 存放最高分步骤
     NSInteger highestScore; // 最高分
     BOOL isFirstLoad;
     BOOL isFirstStep;
@@ -47,16 +47,6 @@ typedef struct {
     CGFloat radiusOfCanvas;
     CGFloat radiusOfCircle;
     
-    // 动态规划
-
-    NSInteger N;
-    int m[NMAX+1][NMAX+1][2];	  //m[i][j][0]表示从v[i]节点开始，边长为j的链的最小值
-                                  //m[i][j][1]表示从v[i]节点开始，边长为j的链的最大值
-    int v[NMAX+1];
-    char op[NMAX+1],maxs,mins;
-    char p[NMAX+1][NMAX+1][2];  //这个用String记录顺序的边
-    int minf, maxf;
-
 }
 
 
@@ -127,29 +117,18 @@ typedef struct {
     }
     self.yourScoreLabel.text = [NSString stringWithFormat:@"%ld", (long)startScore];
     
-    // 动态规划计算最高分
-    minf = 0;
-    maxf = 0;
-    N = vertexNum;
-    for (int i = 1; i <= N; i++) {
-        NSLog(@"#0");
-        v[i] = [vertexValues[i-1] intValue];
-//        op[i] = [operatorValues[i-1] charValue];
-        op[i] = ([operatorValues[i-1] isEqualToString:@"+"]) ? '+' : '*';
-    }
-    for(int i=1; i<=N; i++){
-        printf("v[%d]=%d, op[%d]=%c\n", i, v[i], i, op[i]);
-        m[i][1][0]=v[i];
-        m[i][1][1]=v[i];
-    }
-    
+    NSArray *tempArray = [[NSArray alloc]init];
+    BestChoice *bestChoice = [[BestChoice alloc]init];
+    tempArray = [bestChoice getScoreAndSequenceWithN:(int)vertexNum andOP:[operatorValues copy] andValue:[vertexValues copy]];
+    NSLog(@"tempArray: %@", tempArray);
     // 设置最高分
-    highestScore = [self PloyMax];
+    highestScore = [[tempArray objectAtIndex:0] intValue];
     self.highestLabel.text = [NSString stringWithFormat:@"%ld", (long)highestScore];
     
-    
-    
-//    highestArray = [[NSArray alloc]initWithObjects:@"1", @"2", @"3", @"4", @"5", nil];
+    highestArray = [[NSMutableArray alloc]init];
+    for (int i = 1; i <= vertexNum; ++i) {
+        [highestArray addObject:[tempArray objectAtIndex:i]];
+    }
     
 }
 
@@ -1118,7 +1097,7 @@ typedef struct {
     [array addObject:vertexValues];
     [array addObject:operatorValues];
     [array addObject:highestArray];
-
+    NSLog(@"before: %@", vertexValues);
     
     //通过通知中心发送通知
     [[NSNotificationCenter defaultCenter] postNotificationName:@"toStepDemo" object:array];
@@ -1154,110 +1133,7 @@ typedef struct {
     }
 }
 
-#pragma mark - 动态规划求最高分
 
-- (void) MinMaxWithi:(int)i ands:(int)s andj:(int) j
-//minMax(i,s,j)这个方法，就代表:i开头的j长度的链子,取消的是i+s这个点，
-//如果这个链真的是用这个断点时是最佳答案，就在他们子链记录顺序上加上，i+s这条边
-{
-    int e[5];
-    int a=m[i][s][0],b=m[i][s][1]; //a,b分别为第一条子链的最小值和最大值
-    int r=(i+s-1)%N+1;//多边形的实际顶点编号
-    int c=m[r][j-s][0],d=m[r][j-s][1];//c，d分别为第二条子链的最小值和最大值
-    
-    if(op[r]=='+')
-    {
-        minf=a+c;
-        maxf=b+d;
-        mins=(p[i][s][0]+p[r][j-s][0]+r+",");
-        maxs=(p[i][s][1]+p[r][j-s][1]+r+",");
-    }//计算最后一步op为+时的最小，最大值
-    if(op[r] == '*')
-    {
-        e[1]=a*c;
-        e[2]=a*d;
-        e[3]=b*c;
-        e[4]=d*b;
-        minf=e[1];
-        maxf=e[1];
-        mins=p[i][s][0]+p[r][j-s][0]+r;
-        maxs=p[i][s][0]+p[r][j-s][0]+r;
-        
-        for(int r=2;r<5;r++)
-        {
-            if(minf>e[r])
-            {
-                minf=e[r];
-                if(r == 2)
-                    mins = p[i][s][0] +p[r][j-s][1] + r ;
-                if(r == 3)
-                    mins = p[i][s][1] + p[r][j-s][0] + r ;
-                if(r == 4)
-                    mins = p[i][s][1] + p[r][j-s][1] + r ;}
-            if(maxf<e[r])
-            {
-                maxf=e[r];
-                if(r == 2)
-                    maxs = p[i][s][0] +p[r][j-s][1] + r ;
-                if(r == 3)
-                    maxs = p[i][s][1] + p[r][j-s][0] + r ;
-                if(r == 4)
-                    maxs = p[i][s][1] + p[r][j-s][1] + r ;
-            }
-        }
-    }//计算最后一步op为+时的最小，最大值
-    
-}//end MinMax()
-
-- (int)PloyMax {
-    NSInteger n = N;
-    for(int j=2;j<=n;j++) //j是迭代链的长度
-    {
-        for(int i=1;i<=n;i++)//迭代首次删掉第i条边，生成迭代链
-        {
-            [self MinMaxWithi:i ands:1 andj:j];
-            m[i][j][0] = minf;
-            m[i][j][1] = maxf;
-            p[i][j][0] = mins;
-            p[i][j][1] = maxs;
-            for(int s=1 ;s<j;s++) //s是迭代最后合并的位置，根据op进行+或*
-            {
-                [self MinMaxWithi:i ands:s andj:j];
-                if(m[i][j][0]>minf)
-                {
-                    m[i][j][0]=minf;
-                    p[i][j][0]=mins;
-                }
-                
-                if(m[i][j][1]<maxf)
-                {
-                    m[i][j][1]=maxf;
-                    p[i][j][1]=maxs;
-                }
-            }
-        }
-    }
-    
-    int temp = m[1][n][1];
-    int b = 1;//计算最大值首次删除的边p
-    
-    for (int i = 2 ; i <= n; i++)//迭代出最大边
-    {
-        if (temp < m[i][n][1]) {
-            temp = m[i][n][1];
-            b = i;
-        }
-    }
-    printf("多边形游戏首次删除第%d条边\n", b);			//打印最大值首次删除的边
-    printf("删除首边后的删边顺序为：\n");
-    NSLog(@"%c", p[b][1][1]);
-    for(int i = 1; i < n; i++) {
-        NSLog(@"##c");
-        NSLog(@"%c ", p[b][i][1]);
-    }
-    
-    return temp;
-}//end PolyMax()
 
 
 - (void)didReceiveMemoryWarning {
